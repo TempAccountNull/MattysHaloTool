@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <windows.h>
+#include "Commands/test.h"
 
 #pragma warning(disable:4996)
 
@@ -32,6 +33,7 @@ DWORD WINAPI dwConsole(LPVOID)
         std::cout << command;
 
     	// Really awful command handling!
+    	if (!command.compare("test")) TestCMD::test::do_something();
         if (!command.compare("exit")) break;
     	
     	
