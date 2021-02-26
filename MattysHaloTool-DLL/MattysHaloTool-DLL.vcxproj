@@ -144,19 +144,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="console.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Modules\test.cpp" />
-    <ClCompile Include="Utils\string.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="console.h" />
-    <ClInclude Include="main.h" />
-    <ClInclude Include="Modules\MainModule.h" />
-    <ClInclude Include="Modules\test.h" />
-    <ClInclude Include="Utils\singleton.h" />
-    <ClInclude Include="Utils\string.h" />
-    <ClInclude Include="Utils\utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
