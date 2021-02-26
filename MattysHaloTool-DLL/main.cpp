@@ -21,7 +21,8 @@ DWORD WINAPI dwConsole(LPVOID)
     freopen("CONOUT$", "w", stdout);
 
     SetConsoleTitle(TEXT("Matthew's Halo Tool"));
-
+    std::cout << "Placeholder.";
+	
     while (true)
     {
         // Get user input
@@ -29,7 +30,13 @@ DWORD WINAPI dwConsole(LPVOID)
 
         std::getline(std::cin, command);
         std::cout << command;
+
+    	// Really awful command handling!
+        if (!command.compare("exit")) break;
+    	
+    	
     }
+	
 
     return 0;
 }
