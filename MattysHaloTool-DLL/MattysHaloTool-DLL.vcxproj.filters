@@ -21,6 +21,9 @@
     <ClCompile Include="Commands\test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Hooking\halo-reach.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Commands\test.h">
@@ -33,6 +36,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="libraries\Detours-4.0.1\include\syelog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Hooking\halo-reach.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

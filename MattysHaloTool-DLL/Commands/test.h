@@ -1,5 +1,3 @@
-#include <windows.h>
-
 namespace TestCMD
 {
     class test

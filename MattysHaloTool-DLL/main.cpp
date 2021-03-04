@@ -2,17 +2,24 @@
 #include <string>
 #include <windows.h>
 #include "Commands/test.h"
+#include "libraries/Detours-4.0.1/include/detours.h"
 
 #pragma warning(disable:4996)
 
 
+void init_hooks()
+{
+	DetourTransactionBegin();
+    DetourUpdateThread(GetCurrentThread());
+
+}
 
 DWORD WINAPI dwConsole(LPVOID)
 
 {
 
 	// Init Hooks
-
+    init_hooks();
 	
     //Init variables
     std::string command;

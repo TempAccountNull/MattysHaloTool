@@ -147,10 +147,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Commands\test.cpp" />
+    <ClCompile Include="Hooking\halo-reach.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Commands\test.h" />
+    <ClInclude Include="Hooking\halo-reach.h" />
     <ClInclude Include="libraries\Detours-4.0.1\include\detours.h" />
     <ClInclude Include="libraries\Detours-4.0.1\include\detver.h" />
     <ClInclude Include="libraries\Detours-4.0.1\include\syelog.h" />
