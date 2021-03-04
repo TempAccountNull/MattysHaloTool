@@ -9,6 +9,7 @@ void main_init_hooks()
 	DetourTransactionBegin();
     DetourUpdateThread(GetCurrentThread());
     HaloReach::hooks::init_hooks();
+    DetourTransactionCommit();
 }
 
 void main_deinit_hooks()
@@ -49,6 +50,7 @@ DWORD WINAPI dwConsole(LPVOID)
 
     	// Really awful command handling!
     	if (!command.compare("inithooks")) main_init_hooks();
+        if (!command.compare("deinithooks")) main_deinit_hooks();
         if (!command.compare("exit")) break;
     	
     	
