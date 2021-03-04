@@ -26,5 +26,17 @@
     <ClInclude Include="Commands\test.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="libraries\Detours-4.0.1\include\detours.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\Detours-4.0.1\include\detver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\Detours-4.0.1\include\syelog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="libraries\Detours-4.0.1\lib\x64\detours.lib" />
   </ItemGroup>
 </Project>

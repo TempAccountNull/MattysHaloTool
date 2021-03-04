@@ -134,6 +134,7 @@
       <PreprocessorDefinitions>NDEBUG;MATTYSHALOTOOLDLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>Default</LanguageStandard>
+      <AdditionalIncludeDirectories>F:\Documents\GithubProjects\MattysHaloTool\MattysHaloTool-DLL\libraries\Detours-4.0.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -141,6 +142,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
+      <AdditionalLibraryDirectories>F:\Documents\GithubProjects\MattysHaloTool\MattysHaloTool-DLL\libraries\Detours-4.0.1\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -149,6 +151,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Commands\test.h" />
+    <ClInclude Include="libraries\Detours-4.0.1\include\detours.h" />
+    <ClInclude Include="libraries\Detours-4.0.1\include\detver.h" />
+    <ClInclude Include="libraries\Detours-4.0.1\include\syelog.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="libraries\Detours-4.0.1\lib\x64\detours.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

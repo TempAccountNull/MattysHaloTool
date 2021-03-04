@@ -10,6 +10,10 @@
 DWORD WINAPI dwConsole(LPVOID)
 
 {
+
+	// Init Hooks
+
+	
     //Init variables
     std::string command;
 
