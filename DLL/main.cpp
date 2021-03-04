@@ -49,7 +49,7 @@ DWORD WINAPI dwConsole(LPVOID)
         std::cout << command;
 
     	// Really awful command handling!
-    	if (!command.compare("inithooks")) main_init_hooks();
+        if (!command.compare("slowmo")) HaloReach::time::slowmotion = !HaloReach::time::slowmotion;
         if (!command.compare("deinithooks")) main_deinit_hooks();
         if (!command.compare("exit")) break;
     	
@@ -63,7 +63,8 @@ DWORD WINAPI dwConsole(LPVOID)
 bool WINAPI DllMain(HMODULE hDll, DWORD dwReason, LPVOID lpReserved)
 {
     if (dwReason == DLL_PROCESS_ATTACH)
-    {	
+    {
+        main_init_hooks();
         CreateThread(0, 0, dwConsole, 0, 0, 0);
         return TRUE;
     }
