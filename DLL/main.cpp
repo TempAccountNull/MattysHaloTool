@@ -1,25 +1,29 @@
-#include <iostream>
-#include <string>
-#include <windows.h>
-#include "Commands/test.h"
-#include "libraries/Detours-4.0.1/include/detours.h"
+#include "pch.h"
+
 
 #pragma warning(disable:4996)
 
 
-void init_hooks()
+void main_init_hooks()
 {
 	DetourTransactionBegin();
     DetourUpdateThread(GetCurrentThread());
+    HaloReach::hooks::init_hooks();
+}
 
+void main_deinit_hooks()
+{
+    DetourTransactionBegin();
+    DetourUpdateThread(GetCurrentThread());
+    HaloReach::hooks::deinit_hooks();
+    DetourTransactionCommit();
 }
 
 DWORD WINAPI dwConsole(LPVOID)
 
 {
-
-	// Init Hooks
-    init_hooks();
+    // Init Hooks
+    //main_init_hooks();
 	
     //Init variables
     std::string command;
@@ -44,7 +48,7 @@ DWORD WINAPI dwConsole(LPVOID)
         std::cout << command;
 
     	// Really awful command handling!
-    	if (!command.compare("test")) TestCMD::test::do_something();
+    	if (!command.compare("inithooks")) main_init_hooks();
         if (!command.compare("exit")) break;
     	
     	
@@ -57,7 +61,7 @@ DWORD WINAPI dwConsole(LPVOID)
 bool WINAPI DllMain(HMODULE hDll, DWORD dwReason, LPVOID lpReserved)
 {
     if (dwReason == DLL_PROCESS_ATTACH)
-    {
+    {	
         CreateThread(0, 0, dwConsole, 0, 0, 0);
         return TRUE;
     }
