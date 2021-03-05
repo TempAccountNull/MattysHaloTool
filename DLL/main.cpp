@@ -8,7 +8,7 @@ void main_init_hooks()
 {
 	DetourTransactionBegin();
     DetourUpdateThread(GetCurrentThread());
-    HaloReach::hooks::init_hooks();
+    HaloReach::Hooks::init_hooks();
     DetourTransactionCommit();
 }
 
@@ -16,8 +16,15 @@ void main_deinit_hooks()
 {
     DetourTransactionBegin();
     DetourUpdateThread(GetCurrentThread());
-    HaloReach::hooks::deinit_hooks();
+    HaloReach::Hooks::deinit_hooks();
     DetourTransactionCommit();
+}
+
+void main_reinit_hooks()
+{
+    main_deinit_hooks();
+    main_init_hooks();
+    std::cout << "\n Hooks reinitialized.";
 }
 
 DWORD WINAPI dwConsole(LPVOID)
@@ -49,9 +56,10 @@ DWORD WINAPI dwConsole(LPVOID)
         std::cout << command;
 
     	// Really awful command handling!
-        if (!command.compare("slowmo")) HaloReach::time::slowmotion = !HaloReach::time::slowmotion;
+        if (!command.compare("slowmo")) HaloReach::Time::SlowMotion = !HaloReach::Time::SlowMotion;
+        if (!command.compare("reinithooks")) main_reinit_hooks();
         if (!command.compare("deinithooks")) main_deinit_hooks();
-        if (!command.compare("exit")) break;
+        if (!command.compare("breakpoint")) break;
     	
     	
     }

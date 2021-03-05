@@ -82,7 +82,7 @@ int main()
 
 	// Get path to dll.
 
-	const char* DllName = "\\MattysHaloTool-DLL.dll";
+	const char* DllName = "\\DLL.dll";
     std::string dllPath = GetCurrentWorkingDir() + DllName;
 
 	// Main code

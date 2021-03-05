@@ -1,16 +1,16 @@
 namespace HaloReach
 {
-    class hooks
+    class Hooks
     {
     public:
 	    static void init_hooks();
 	    static void deinit_hooks();
     };
 
-    class time
+    class Time
     {
     public:
-        static bool slowmotion;
+        static bool SlowMotion;
     };
 
 }
