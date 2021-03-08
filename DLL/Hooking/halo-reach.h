@@ -7,10 +7,4 @@ namespace HaloReach
 	    static void deinit_hooks();
     };
 
-    class Time
-    {
-    public:
-        static bool SlowMotion;
-    };
-
 }

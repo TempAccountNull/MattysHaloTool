@@ -56,7 +56,6 @@ DWORD WINAPI dwConsole(LPVOID)
         std::cout << command;
 
     	// Really awful command handling!
-        if (!command.compare("slowmo")) HaloReach::Time::SlowMotion = !HaloReach::Time::SlowMotion;
         if (!command.compare("reinithooks")) main_reinit_hooks();
         if (!command.compare("deinithooks")) main_deinit_hooks();
         if (!command.compare("breakpoint")) break;
