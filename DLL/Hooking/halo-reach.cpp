@@ -1,13 +1,19 @@
 #include "pch.h"
 
+//TODO: this code is a real mess, should tidy it up sometime.
+//NOTE: std::cout << "\n function(" << a1 << "," << a2 << "," << a3 << ")";
 bool HaloReach::Time::SlowMotion = false;
 
-//object_set_scale
-typedef __int64 __fastcall unit_start_running_blindly(unsigned __int16 a1);
-unit_start_running_blindly* do_weird_things = (unit_start_running_blindly*)((char*)GetModuleHandle(L"haloreach.dll") + 0x484ED8);
+//unit_start_running_blindly
+typedef int __fastcall player_index_from_unit_index(int a1);
+player_index_from_unit_index* player_index_from_unit_index_og = (player_index_from_unit_index*)((char*)GetModuleHandle(L"haloreach.dll") + 0x5CB6C);
 
-//unit_update_damage
-static char __fastcall unit_update_damage(unsigned int a1);
+//unit_start_running_blindly
+typedef __int64 __fastcall unit_start_running_blindly(unsigned __int16 unit);
+unit_start_running_blindly* run_blindly = (unit_start_running_blindly*)((char*)GetModuleHandle(L"haloreach.dll") + 0x484ED8);
+
+//unit_update_damage - great for making units do things
+static char __fastcall unit_update_damage(unsigned int unit);
 static decltype(unit_update_damage)* unit_update_damage__original = nullptr;
 
 void unit_update_damage_hook()
@@ -22,11 +28,16 @@ void unit_update_damage_dispose()
 	DetourDetach((PVOID*)&unit_update_damage__original, unit_update_damage);
 }
 
-char __fastcall unit_update_damage(unsigned int a1)
+char __fastcall unit_update_damage(unsigned int unit)
 {
+	char result = unit_update_damage__original(unit);
 
-	auto result = unit_update_damage__original(a1);
-	do_weird_things(a1);
+	int unit_player_index = player_index_from_unit_index_og(unit);
+	// If unit does not have a player index, do shit.
+	if (unit_player_index == -1)
+	{
+		run_blindly(unit);
+	}
 	return result;
 }
 
@@ -75,15 +86,13 @@ __int64 __fastcall game_update(int tick_count, float* game_seconds_elapsed)
 
 void HaloReach::Hooks::init_hooks()
 {
-	game_update_hook();
+	//game_update_hook();
 	unit_update_damage_hook();
 }
 
-
-
 void HaloReach::Hooks::deinit_hooks()
 {
-	game_update_dispose();
+	//game_update_dispose();
 	unit_update_damage_dispose();
 }
 
