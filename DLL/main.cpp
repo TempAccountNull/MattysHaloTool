@@ -18,6 +18,7 @@ void main_deinit_hooks()
     DetourUpdateThread(GetCurrentThread());
     HaloReach::Hooks::deinit_hooks();
     DetourTransactionCommit();
+    std::cout << "\n Hooks un-initialized.";
 }
 
 void main_reinit_hooks()
@@ -55,7 +56,7 @@ DWORD WINAPI dwConsole(LPVOID)
         std::getline(std::cin, command);
         std::cout << command;
 
-    	// Really awful command handling!
+    	// Really awful command handling!dein
         if (!command.compare("reinithooks")) main_reinit_hooks();
         if (!command.compare("deinithooks")) main_deinit_hooks();
         if (!command.compare("breakpoint")) break;

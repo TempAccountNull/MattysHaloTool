@@ -92,7 +92,7 @@ int main()
     while (!procId)
     {
         procId = GetProcId(procName);
-        Sleep(1000);
+        Sleep(5000);
     }
 
 	if( file_exists(dllPath))
