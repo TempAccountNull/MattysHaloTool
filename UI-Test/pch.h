@@ -9,5 +9,6 @@
 
 // add headers that you want to pre-compile here
 #include "framework.h"
+#include "libraries/Detours-4.0.1/include/detours.h"
 
 #endif //PCH_H
