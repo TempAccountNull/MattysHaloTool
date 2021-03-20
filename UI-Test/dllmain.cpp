@@ -1,4 +1,7 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
+// TODO: Make a hook for the games graphics api, aka DX11
+// https://github.com/Immediate-Mode-UI/Nuklear
+
 #include "pch.h"
 
 BOOL APIENTRY DllMain( HMODULE hModule,
