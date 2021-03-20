@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
+    <ClInclude Include="nuklear.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
