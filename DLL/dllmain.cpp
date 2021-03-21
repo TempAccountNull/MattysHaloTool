@@ -9,12 +9,7 @@
 
 void Hook_UI()
 {
-	ui::hooking::GetPresent();
-
-	// If GetPresent failed we have this backup method to get Present Address
-	if (!ui::hooking::g_PresentHooked) {
 		ui::hooking::retrieveValues();
-	}
 
 	// After this call, Present should be hooked and controlled by me.
 	ui::hooking::detourDirectXPresent();

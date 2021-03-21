@@ -37,34 +37,8 @@ INT iBaseVertexLocation;
 // Boolean
 bool ui::hooking::g_bInitialised = false;
 bool g_ShowMenu = false;
-bool bDrawIndexed = true;
-bool bCurrent;
 bool ui::hooking::g_PresentHooked = false;
 
-//vertex
-UINT veStartSlot;
-UINT veNumBuffers;
-ID3D11Buffer* veBuffer;
-UINT Stride;
-UINT veBufferOffset;
-D3D11_BUFFER_DESC vedesc;
-
-//index
-ID3D11Buffer* inBuffer;
-DXGI_FORMAT inFormat;
-UINT        inOffset;
-D3D11_BUFFER_DESC indesc;
-
-//psgetConstantbuffers
-UINT pscStartSlot;
-UINT pscNumBuffers;
-ID3D11Buffer* pscBuffer;
-D3D11_BUFFER_DESC pscdesc;
-
-//Z-Buffering variables
-ID3D11DepthStencilState* m_DepthStencilState;
-ID3D11DepthStencilState* m_origDepthStencilState;
-UINT pStencilRef;
 
 LRESULT CALLBACK hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -126,7 +100,7 @@ void Main_Menu()
 		}
 		if (ImGui::BeginTabItem("Universal"))
 		{
-			ImGui::Text("UniversalShit!");
+			ImGui::Checkbox("Wireframe Mode", nullptr);
 			ImGui::EndTabItem();
 		}
 		ImGui::EndTabBar();
@@ -254,61 +228,11 @@ void ui::hooking::detourDirectXPresent()
 void ui::hooking::retrieveValues()
 {
 	DWORD_PTR hDxgi = (DWORD_PTR)GetModuleHandle("dxgi.dll");
-
-	fnIDXGISwapChainPresent = (IDXGISwapChainPresent)((DWORD_PTR)hDxgi + 0x5070);
+		
+	fnIDXGISwapChainPresent = (IDXGISwapChainPresent)((DWORD_PTR)hDxgi + 0x4670);
 }
 
 LRESULT CALLBACK DXGIMsgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) { return DefWindowProc(hwnd, uMsg, wParam, lParam); }
-
-void  ui::hooking::GetPresent()
-{
-	WNDCLASSEXA wc = { sizeof(WNDCLASSEX), CS_CLASSDC, DXGIMsgProc, 0L, 0L, GetModuleHandleA(NULL), NULL, NULL, NULL, NULL, "DX", NULL };
-	RegisterClassExA(&wc);
-	HWND hWnd = CreateWindowA("DX", NULL, WS_OVERLAPPEDWINDOW, 100, 100, 300, 300, NULL, NULL, wc.hInstance, NULL);
-
-	DXGI_SWAP_CHAIN_DESC sd;
-	ZeroMemory(&sd, sizeof(sd));
-	sd.BufferCount = 1;
-	sd.BufferDesc.Width = 2;
-	sd.BufferDesc.Height = 2;
-	sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	sd.BufferDesc.RefreshRate.Numerator = 60;
-	sd.BufferDesc.RefreshRate.Denominator = 1;
-	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	sd.OutputWindow = hWnd;
-	sd.SampleDesc.Count = 1;
-	sd.SampleDesc.Quality = 0;
-	sd.Windowed = TRUE;
-	sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-	D3D_FEATURE_LEVEL FeatureLevelsRequested = D3D_FEATURE_LEVEL_11_0;
-	UINT numFeatureLevelsRequested = 1;
-	D3D_FEATURE_LEVEL FeatureLevelsSupported;
-	HRESULT hr;
-	IDXGISwapChain* swapchain = 0;
-	ID3D11Device* dev = 0;
-	ID3D11DeviceContext* devcon = 0;
-	if (FAILED(hr = D3D11CreateDeviceAndSwapChain(NULL,
-		D3D_DRIVER_TYPE_HARDWARE,
-		NULL,
-		0,
-		&FeatureLevelsRequested,
-		numFeatureLevelsRequested,
-		D3D11_SDK_VERSION,
-		&sd,
-		&swapchain,
-		&dev,
-		&FeatureLevelsSupported,
-		&devcon)))
-	{
-		return;
-	}
-	DWORD_PTR* pSwapChainVtable = NULL;
-	pSwapChainVtable = (DWORD_PTR*)swapchain;
-	pSwapChainVtable = (DWORD_PTR*)pSwapChainVtable[0];
-	fnIDXGISwapChainPresent = (IDXGISwapChainPresent)(DWORD_PTR)pSwapChainVtable[8];
-	g_PresentHooked = true;
-	Sleep(2000);
-}
 
 void ui::hooking::UnhookUI()
 {
