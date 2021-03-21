@@ -9,9 +9,19 @@
 
 // add headers that you want to pre-compile here
 #include "framework.h"
+#include <Windows.h>
+#include "ui/ui.h"
+
+//DirectX11
+#include <d3d11.h>
+
+//Detours
 #include "libraries/Detours-4.0.1/include/detours.h"
-#include <iostream>
-#include <string>
-#include "Hooking/halo-reach.h"
+
+
+
+
+// Other
+#include <cstdio>
 
 #endif //PCH_H

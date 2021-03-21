@@ -1,6 +1,5 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
-// TODO: Make a hook for the games graphics api, aka DX11 and integrate nuklear
-// https://github.com/Immediate-Mode-UI/Nuklear
+// TODO: Unlock cursor when using menu.
 
 #include "pch.h"
 
