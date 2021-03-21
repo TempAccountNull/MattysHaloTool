@@ -12,7 +12,6 @@ void Hook_UI()
 	if (!ui::hooking::g_PresentHooked) {
 		ui::hooking::retrieveValues();
 	}
-    
 
 	// After this call, Present should be hooked and controlled by me.
 	ui::hooking::detourDirectXPresent();
@@ -23,27 +22,26 @@ void Hook_UI()
 
 int WINAPI main()
 {
-    Hook_UI();
+	Hook_UI();
 }
 
-BOOL APIENTRY DllMain( HMODULE hModule,
-                       DWORD  ul_reason_for_call,
-                       LPVOID lpReserved)
+BOOL APIENTRY DllMain(HMODULE hModule,
+	DWORD  ul_reason_for_call,
+	LPVOID lpReserved)
 {
 	// ReSharper disable once CppDefaultCaseNotHandledInSwitchStatement
 	switch (ul_reason_for_call)  // NOLINT(hicpp-multiway-paths-covered)
-    {
-    case DLL_PROCESS_ATTACH:
-        // Hook shit and render UI
-        DisableThreadLibraryCalls(hModule);
-        CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)main, NULL, NULL, NULL);
-    case DLL_THREAD_ATTACH:
-    case DLL_THREAD_DETACH:
-    case DLL_PROCESS_DETACH:
+	{
+	case DLL_PROCESS_ATTACH:
+		// Hook shit and render UI
+		DisableThreadLibraryCalls(hModule);
+		CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)main, NULL, NULL, NULL);
+	case DLL_THREAD_ATTACH:
+	case DLL_THREAD_DETACH:
+	case DLL_PROCESS_DETACH:
 		// Unhook shit and get rid of UI
-        ui::hooking::UnhookUI();
-        break;
-    }
-    return TRUE;
+		ui::hooking::UnhookUI();
+		break;
+	}
+	return TRUE;
 }
-
