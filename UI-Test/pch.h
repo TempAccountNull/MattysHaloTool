@@ -9,6 +9,22 @@
 
 // add headers that you want to pre-compile here
 #include "framework.h"
-#include "libraries/Detours-4.0.1/include/detours.h"
+#include <Windows.h>
+#include "ui/ui.h"
 
+// Third-Party Libs
+#include "libraries/Detours-4.0.1/include/detours.h"
+#include "libraries/Nuklear/nuklear.h"
+#include "libraries/Nuklear/demo/d3d11/nuklear_d3d11.h"
+
+//DirectX11
+#include <d3d11.h>
+#include <D3Dcompiler.h>
+#include <iostream>
+#include <iomanip>
+#include <cstdio>
+#include <unordered_set>
+#include <mutex>
+
+// Other
 #endif //PCH_H
