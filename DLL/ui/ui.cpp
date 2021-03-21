@@ -148,8 +148,6 @@ void Main_Menu()
 		}
 		ImGui::EndTabBar();
 	}
-
-	ImGui::EndChild();
 	ImGui::End();
 }
 
