@@ -1,8 +1,5 @@
 #include "pch.h"
 
-
-
-
 // DX11 imports
 
 #pragma comment(lib, "D3dcompiler.lib")
@@ -10,13 +7,16 @@
 #pragma comment(lib, "winmm.lib")
 #define SAFE_RELEASE(p)      { if(p) { (p)->Release(); (p)=NULL; } }
 
+//ImGUI imports
+#include <imgui.h>
+#include <imgui_impl_win32.h>
+#include <imgui_impl_dx11.h>
 
 // D3X HOOK DEFINITIONS
 typedef HRESULT(__fastcall* IDXGISwapChainPresent)(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags);
 typedef void(__stdcall* ID3D11DrawIndexed)(ID3D11DeviceContext* pContext, UINT IndexCount, UINT StartIndexLocation, INT BaseVertexLocation);
 // Definition of WndProc Hook. Its here to avoid dragging dependencies on <windows.h> types.
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
 
 // Main D3D11 Objects
 ID3D11DeviceContext* pContext = NULL;
@@ -59,21 +59,19 @@ UINT pscNumBuffers;
 ID3D11Buffer* pscBuffer;
 D3D11_BUFFER_DESC pscdesc;
 
-
 //Z-Buffering variables
 ID3D11DepthStencilState* m_DepthStencilState;
 ID3D11DepthStencilState* m_origDepthStencilState;
 UINT pStencilRef;
 
-
 LRESULT CALLBACK hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	//ImGuiIO& io = ImGui::GetIO();
-	//POINT mPos;
-	//GetCursorPos(&mPos);
-	//ScreenToClient(window, &mPos);
-	//ImGui::GetIO().MousePos.x = mPos.x;
-	//ImGui::GetIO().MousePos.y = mPos.y;
+	ImGuiIO& io = ImGui::GetIO();
+	POINT mPos;
+	GetCursorPos(&mPos);
+	ScreenToClient(window, &mPos);
+	ImGui::GetIO().MousePos.x = mPos.x;
+	ImGui::GetIO().MousePos.y = mPos.y;
 
 	if (uMsg == WM_KEYUP)
 	{
@@ -81,18 +79,16 @@ LRESULT CALLBACK hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		{
 			g_ShowMenu = !g_ShowMenu;
 		}
-
 	}
 
 	if (g_ShowMenu)
 	{
-		//ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam);
+		ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam);
 		return true;
 	}
 
 	return CallWindowProc(OriginalWndProcHandler, hWnd, uMsg, wParam, lParam);
 }
-
 
 HRESULT GetDeviceAndCtxFromSwapchain(IDXGISwapChain* pSwapChain, ID3D11Device** ppDevice, ID3D11DeviceContext** ppContext)
 {
@@ -104,6 +100,59 @@ HRESULT GetDeviceAndCtxFromSwapchain(IDXGISwapChain* pSwapChain, ID3D11Device** 
 	return ret;
 }
 
+void Main_Menu()
+{
+	ImGui::Begin("Matthew's Halo Tool!", &g_ShowMenu, ImGuiWindowFlags_MenuBar);
+	if (ImGui::BeginMenuBar())
+	{
+		if (ImGui::BeginMenu("Menu"))
+		{
+			if (ImGui::MenuItem("Settings")) { /* Do stuff */ }
+			if (ImGui::MenuItem("Close")) { /* Do stuff */ }
+			if (ImGui::MenuItem("Detach DLL")) { /* Do stuff */ }
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Games"))
+		{
+			if (ImGui::MenuItem("Halo Reach")) { /* Do stuff */ }
+			ImGui::EndMenu();
+		}
+
+		//if (ImGui::BeginMenu("Universal"))
+		//{
+		//    if (ImGui::MenuItem("WIP")) { /* Do stuff */ }
+		//    ImGui::EndMenu();
+		//}
+
+		ImGui::EndMenuBar();
+	}
+
+	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_NoCloseWithMiddleMouseButton | ImGuiTabBarFlags_Reorderable;
+	if (ImGui::BeginTabBar("TabBar", tab_bar_flags))
+	{
+		if (ImGui::BeginTabItem("Weapons"))
+		{
+			ImGui::Text("This is the Weapons tab!\nblah blah blah blah blah");
+			ImGui::EndTabItem();
+		}
+		if (ImGui::BeginTabItem("AI"))
+		{
+			ImGui::Text("This is the AI tab!\nblah blah blah blah blah");
+			ImGui::EndTabItem();
+		}
+		if (ImGui::BeginTabItem("Other"))
+		{
+			ImGui::Text("This is the Other tab!\nblah blah blah blah blah");
+			ImGui::EndTabItem();
+		}
+		ImGui::EndTabBar();
+	}
+
+	ImGui::EndChild();
+	ImGui::End();
+}
+
 HRESULT __fastcall Present(IDXGISwapChain* pChain, UINT SyncInterval, UINT Flags)
 {
 	if (!ui::hooking::g_bInitialised) {
@@ -113,18 +162,20 @@ HRESULT __fastcall Present(IDXGISwapChain* pChain, UINT SyncInterval, UINT Flags
 		DXGI_SWAP_CHAIN_DESC sd;
 		pChain->GetDesc(&sd);
 
-		//ImGui::CreateContext();
-		//ImGuiIO& io = ImGui::GetIO(); (void)io;
-		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 
 		window = sd.OutputWindow;
 
 		//Set OriginalWndProcHandler to the Address of the Original WndProc function
 		OriginalWndProcHandler = (WNDPROC)SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)hWndProc);
 
-		//ImGui_ImplWin32_Init(window);
-		//ImGui_ImplDX11_Init(pDevice, pContext);
-		//ImGui::GetIO().ImeWindowHandle = window;
+		ImGui_ImplWin32_Init(window);
+		ImGui_ImplDX11_Init(pDevice, pContext);
+		ImGui::GetIO().ImeWindowHandle = window;
+
+		ImGui_ImplDX11_InvalidateDeviceObjects();
 
 		ID3D11Texture2D* pBackBuffer;
 
@@ -134,25 +185,24 @@ HRESULT __fastcall Present(IDXGISwapChain* pChain, UINT SyncInterval, UINT Flags
 
 		ui::hooking::g_bInitialised = true;
 	}
-	//ImGui_ImplWin32_NewFrame();
-	//ImGui_ImplDX11_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui_ImplDX11_NewFrame();
 
-	//ImGui::NewFrame();
+	ImGui::NewFrame();
 	//
 	//Menu is displayed when g_ShowMenu is TRUE
 	if (g_ShowMenu)
 	{
-		bool bShow = true;
-		//ImGui::ShowDemoWindow(&bShow);
+		Main_Menu();
 	}
 
-	//ImGui::EndFrame();
+	ImGui::EndFrame();
 
-	//ImGui::Render();
+	ImGui::Render();
 
 	pContext->OMSetRenderTargets(1, &mainRenderTargetView, NULL);
 
-	//ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
 	return fnIDXGISwapChainPresent(pChain, SyncInterval, Flags);
 }
