@@ -21,13 +21,19 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="libraries\Nuklear\nuklear.h">
+    <ClInclude Include="ui\ui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="libraries\Nuklear\demo\d3d11\nuklear_d3d11.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ui\ui.h">
+    <ClInclude Include="libraries\Nuklear\nuklear.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\Nuklear\demo\d3d11\nuklear_d3d11_pixel_shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\Nuklear\demo\d3d11\nuklear_d3d11_vertex_shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -28,8 +28,7 @@ int WINAPI main()
 
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
-                       LPVOID lpReserved
-)
+                       LPVOID lpReserved)
 {
 	// ReSharper disable once CppDefaultCaseNotHandledInSwitchStatement
 	switch (ul_reason_for_call)  // NOLINT(hicpp-multiway-paths-covered)

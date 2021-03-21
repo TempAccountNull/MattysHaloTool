@@ -1,6 +1,8 @@
 #include "pch.h"
 
+//Nuklear
 
+nk_context* g_pNkContext;
 
 
 // DX11 imports
@@ -15,7 +17,7 @@
 typedef HRESULT(__fastcall* IDXGISwapChainPresent)(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags);
 typedef void(__stdcall* ID3D11DrawIndexed)(ID3D11DeviceContext* pContext, UINT IndexCount, UINT StartIndexLocation, INT BaseVertexLocation);
 // Definition of WndProc Hook. Its here to avoid dragging dependencies on <windows.h> types.
-extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+//extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 
 // Main D3D11 Objects
@@ -39,32 +41,45 @@ bool bDrawIndexed = true;
 bool bCurrent;
 bool ui::hooking::g_PresentHooked = false;
 
-//vertex
-UINT veStartSlot;
-UINT veNumBuffers;
-ID3D11Buffer* veBuffer;
-UINT Stride;
-UINT veBufferOffset;
-D3D11_BUFFER_DESC vedesc;
 
-//index
-ID3D11Buffer* inBuffer;
-DXGI_FORMAT inFormat;
-UINT        inOffset;
-D3D11_BUFFER_DESC indesc;
+int g_iWindowHeight;
 
-//psgetConstantbuffers
-UINT pscStartSlot;
-UINT pscNumBuffers;
-ID3D11Buffer* pscBuffer;
-D3D11_BUFFER_DESC pscdesc;
+int g_iWindowWidth;
 
 
-//Z-Buffering variables
-ID3D11DepthStencilState* m_DepthStencilState;
-ID3D11DepthStencilState* m_origDepthStencilState;
-UINT pStencilRef;
 
+HRESULT GetDeviceAndg_pNkContextFromSwapchain(IDXGISwapChain* pSwapChain, ID3D11Device** ppDevice, ID3D11DeviceContext** ppContext)
+{
+	HRESULT ret = pSwapChain->GetDevice(__uuidof(ID3D11Device), (PVOID*)ppDevice);
+
+	if (SUCCEEDED(ret))
+		(*ppDevice)->GetImmediateContext(ppContext);
+
+	return ret;
+}
+
+void GUIResize(void)
+{
+	ID3D11Texture2D* back_buffer;
+	D3D11_RENDER_TARGET_VIEW_DESC desc;
+	HRESULT hr;
+
+	if (mainRenderTargetView)
+		mainRenderTargetView->Release();
+
+	pContext->OMSetRenderTargets(0, NULL, NULL);
+	hr = pSwapChain->ResizeBuffers(0, g_iWindowWidth, g_iWindowHeight, DXGI_FORMAT_UNKNOWN, 0);
+
+	//Wrapper::Memset(&desc, 0, sizeof(desc));
+	desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+
+	hr = pSwapChain->GetBuffer(0, __uuidof(back_buffer), (void**)&back_buffer);
+	hr = pDevice->CreateRenderTargetView((ID3D11Resource*)back_buffer, &desc, &mainRenderTargetView);
+	back_buffer->Release();
+
+	nk_d3d11_resize(pContext, g_iWindowWidth, g_iWindowHeight);
+}
 
 LRESULT CALLBACK hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -74,6 +89,24 @@ LRESULT CALLBACK hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	//ScreenToClient(window, &mPos);
 	//ImGui::GetIO().MousePos.x = mPos.x;
 	//ImGui::GetIO().MousePos.y = mPos.y;
+
+	// Do Window Validation
+	RECT WindowRect;
+
+	if (GetClientRect(hWnd, &WindowRect))
+	{
+		if (g_iWindowHeight == 0)
+			g_iWindowHeight = WindowRect.bottom - WindowRect.top;
+
+		if (g_iWindowWidth == 0)
+			g_iWindowWidth = WindowRect.right - WindowRect.left;
+
+		int CurrentWidth = WindowRect.right - WindowRect.left;
+		int CurrentHeight = WindowRect.bottom - WindowRect.top;
+
+		if (g_iWindowHeight != CurrentHeight || g_iWindowWidth != CurrentWidth)
+			GUIResize();
+	}
 
 	if (uMsg == WM_KEYUP)
 	{
@@ -93,21 +126,50 @@ LRESULT CALLBACK hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	return CallWindowProc(OriginalWndProcHandler, hWnd, uMsg, wParam, lParam);
 }
 
-
-HRESULT GetDeviceAndCtxFromSwapchain(IDXGISwapChain* pSwapChain, ID3D11Device** ppDevice, ID3D11DeviceContext** ppContext)
+void Start(void)
 {
-	HRESULT ret = pSwapChain->GetDevice(__uuidof(ID3D11Device), (PVOID*)ppDevice);
+	// This is my custom crap, I suggest to look at the nuklear file and do a window hook.
+	nk_input_begin(g_pNkContext);
+	//InputHandler();
+	nk_input_end(g_pNkContext);
+}
 
-	if (SUCCEEDED(ret))
-		(*ppDevice)->GetImmediateContext(ppContext);
+void End(void)
+{
+	pContext->OMSetRenderTargets(1, &mainRenderTargetView, NULL);
+	nk_d3d11_render(pContext, NK_ANTI_ALIASING_ON);
+}
 
-	return ret;
+void MenuBackend(void)
+{
+	if (nk_begin(g_pNkContext, "Demo", nk_rect(50, 50, 230, 250),
+		NK_WINDOW_BORDER | NK_WINDOW_MOVABLE | NK_WINDOW_SCALABLE |
+		NK_WINDOW_MINIMIZABLE | NK_WINDOW_TITLE))
+	{
+		enum { EASY, HARD };
+		static int op = EASY;
+		static int property = 20;
+
+		nk_layout_row_static(g_pNkContext, 30, 80, 1);
+		if (nk_button_label(g_pNkContext, "button"))
+			fprintf(stdout, "button pressed\n");
+		nk_layout_row_dynamic(g_pNkContext, 30, 2);
+		if (nk_option_label(g_pNkContext, "easy", op == EASY)) op = EASY;
+		if (nk_option_label(g_pNkContext, "hard", op == HARD)) op = HARD;
+		nk_layout_row_dynamic(g_pNkContext, 22, 1);
+		nk_property_int(g_pNkContext, "Compression:", 0, &property, 100, 10, 1);
+
+		nk_layout_row_dynamic(g_pNkContext, 20, 1);
+		nk_label(g_pNkContext, "background:", NK_TEXT_LEFT);
+		nk_layout_row_dynamic(g_pNkContext, 25, 1);
+	}
+	nk_end(g_pNkContext);
 }
 
 HRESULT __fastcall Present(IDXGISwapChain* pChain, UINT SyncInterval, UINT Flags)
 {
 	if (!ui::hooking::g_bInitialised) {
-		if (FAILED(GetDeviceAndCtxFromSwapchain(pChain, &pDevice, &pContext)))
+		if (FAILED(GetDeviceAndg_pNkContextFromSwapchain(pChain, &pDevice, &pContext)))
 			return fnIDXGISwapChainPresent(pChain, SyncInterval, Flags);
 		pSwapChain = pChain;
 		DXGI_SWAP_CHAIN_DESC sd;
@@ -132,6 +194,13 @@ HRESULT __fastcall Present(IDXGISwapChain* pChain, UINT SyncInterval, UINT Flags
 		pDevice->CreateRenderTargetView(pBackBuffer, NULL, &mainRenderTargetView);
 		pBackBuffer->Release();
 
+		// Initialize Nuklear
+		g_pNkContext = nk_d3d11_init(pDevice, g_iWindowWidth, g_iWindowHeight, MAX_VERTEX_BUFFER, MAX_INDEX_BUFFER);
+
+		nk_font_atlas* pNkAtlas;
+		nk_d3d11_font_stash_begin(&pNkAtlas);
+		nk_d3d11_font_stash_end();
+		
 		ui::hooking::g_bInitialised = true;
 	}
 	//ImGui_ImplWin32_NewFrame();
