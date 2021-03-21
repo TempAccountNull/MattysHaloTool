@@ -1,7 +1,8 @@
 #include "pch.h"
+#include "ui.h"
+#include "../utils.h"
 
 // DX11 imports
-
 #pragma comment(lib, "D3dcompiler.lib")
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "winmm.lib")
@@ -11,6 +12,7 @@
 #include <imgui.h>
 #include <imgui_impl_win32.h>
 #include <imgui_impl_dx11.h>
+
 
 // D3X HOOK DEFINITIONS
 typedef HRESULT(__fastcall* IDXGISwapChainPresent)(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags);
@@ -151,6 +153,8 @@ void Main_Menu()
 	ImGui::End();
 }
 
+
+
 HRESULT __fastcall Present(IDXGISwapChain* pChain, UINT SyncInterval, UINT Flags)
 {
 	if (!ui::hooking::g_bInitialised) {
@@ -162,7 +166,13 @@ HRESULT __fastcall Present(IDXGISwapChain* pChain, UINT SyncInterval, UINT Flags
 
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
-		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+		// Not needed right now.
+
+		// Get path of dll and save imgui config there.
+		std::string ImguiConfigPath = utils::locations::GetCurrentWorkingDir();
+		ImguiConfigPath.append("\\ui.ini");
+		io.IniFilename = ImguiConfigPath.c_str();
 
 		window = sd.OutputWindow;
 
@@ -216,7 +226,7 @@ void ui::hooking::detourDirectXPresent()
 
 void ui::hooking::retrieveValues()
 {
-	DWORD_PTR hDxgi = (DWORD_PTR)GetModuleHandle(L"dxgi.dll");
+	DWORD_PTR hDxgi = (DWORD_PTR)GetModuleHandle("dxgi.dll");
 
 	fnIDXGISwapChainPresent = (IDXGISwapChainPresent)((DWORD_PTR)hDxgi + 0x5070);
 }

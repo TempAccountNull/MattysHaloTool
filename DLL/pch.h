@@ -10,7 +10,8 @@
 // add headers that you want to pre-compile here
 #include "framework.h"
 #include <Windows.h>
-#include "ui/ui.h"
+#include <iostream>
+#include <string>
 
 //DirectX11
 #include <d3d11.h>

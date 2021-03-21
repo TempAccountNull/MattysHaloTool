@@ -3,6 +3,8 @@
 
 #include "pch.h"
 
+#include "ui/ui.h"
+
 void Hook_UI()
 {
 	ui::hooking::GetPresent();
@@ -21,6 +23,17 @@ void Hook_UI()
 
 int WINAPI main()
 {
+
+	#ifdef DEBUG
+	//Initialize Console
+	AllocConsole();
+	AttachConsole(GetCurrentProcessId());
+
+	//Redirect output to console
+	freopen("CONIN$", "r", stdin);
+	freopen("CONOUT$", "w", stdout);
+	#endif
+	
 	Hook_UI();
 }
 
