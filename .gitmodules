@@ -1,0 +1,3 @@
+[submodule "UI-Test/libraries/Nuklear"]
+	path = UI-Test/libraries/Nuklear
+	url = https://github.com/Immediate-Mode-UI/Nuklear.git
