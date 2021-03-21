@@ -109,43 +109,24 @@ void Main_Menu()
 	{
 		if (ImGui::BeginMenu("Menu"))
 		{
-			if (ImGui::MenuItem("Settings")) { /* Do stuff */ }
-			if (ImGui::MenuItem("Close")) { /* Do stuff */ }
-			if (ImGui::MenuItem("Detach DLL")) { utils::DLL_Management::Kill_DLL(); }
+			if (ImGui::MenuItem("Settings")) { /* Open Settings Window WIP */ }
+			if (ImGui::MenuItem("Detach DLL")) { /*utils::DLL_Management::Kill_DLL();*/ }
 			ImGui::EndMenu();
 		}
-
-		if (ImGui::BeginMenu("Games"))
-		{
-			if (ImGui::MenuItem("Halo Reach")) { /* Do stuff */ }
-			ImGui::EndMenu();
-		}
-
-		//if (ImGui::BeginMenu("Universal"))
-		//{
-		//    if (ImGui::MenuItem("WIP")) { /* Do stuff */ }
-		//    ImGui::EndMenu();
-		//}
-
 		ImGui::EndMenuBar();
 	}
 
 	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_NoCloseWithMiddleMouseButton | ImGuiTabBarFlags_Reorderable;
-	if (ImGui::BeginTabBar("TabBar", tab_bar_flags))
+	if (ImGui::BeginTabBar("MainTabs", tab_bar_flags))
 	{
-		if (ImGui::BeginTabItem("Weapons"))
+		if (ImGui::BeginTabItem("Halo Reach"))
 		{
-			ImGui::Text("This is the Weapons tab!\nblah blah blah blah blah");
+			ImGui::Text("HaloReachShit!");
 			ImGui::EndTabItem();
 		}
-		if (ImGui::BeginTabItem("AI"))
+		if (ImGui::BeginTabItem("Universal"))
 		{
-			ImGui::Text("This is the AI tab!\nblah blah blah blah blah");
-			ImGui::EndTabItem();
-		}
-		if (ImGui::BeginTabItem("Other"))
-		{
-			ImGui::Text("This is the Other tab!\nblah blah blah blah blah");
+			ImGui::Text("UniversalShit!");
 			ImGui::EndTabItem();
 		}
 		ImGui::EndTabBar();
@@ -169,6 +150,52 @@ HRESULT __fastcall Present(IDXGISwapChain* pChain, UINT SyncInterval, UINT Flags
 		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 		// Not needed right now.
 
+		// Style
+		ImGuiStyle& style = ImGui::GetStyle();
+		style.WindowTitleAlign = ImVec2(0.5f, 0.5f);
+		style.WindowMenuButtonPosition = ImGuiDir_None;
+		
+		ImVec4* colors = ImGui::GetStyle().Colors;
+		colors[ImGuiCol_WindowBg] = ImVec4(0.10f, 0.00f, 0.00f, 0.94f);
+		colors[ImGuiCol_PopupBg] = ImVec4(0.15f, 0.00f, 0.00f, 0.94f);
+		colors[ImGuiCol_Border] = ImVec4(0.34f, 0.00f, 0.00f, 0.50f);
+		colors[ImGuiCol_FrameBg] = ImVec4(0.19f, 0.00f, 0.00f, 0.54f);
+		colors[ImGuiCol_FrameBgHovered] = ImVec4(1.00f, 0.00f, 0.00f, 0.40f);
+		colors[ImGuiCol_FrameBgActive] = ImVec4(1.00f, 0.00f, 0.00f, 0.67f);
+		colors[ImGuiCol_TitleBg] = ImVec4(0.55f, 0.00f, 0.00f, 1.00f);
+		colors[ImGuiCol_TitleBgActive] = ImVec4(0.67f, 0.00f, 0.00f, 1.00f);
+		colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.42f, 0.00f, 0.00f, 0.51f);
+		colors[ImGuiCol_MenuBarBg] = ImVec4(0.34f, 0.00f, 0.00f, 1.00f);
+		colors[ImGuiCol_ScrollbarBg] = ImVec4(0.18f, 0.00f, 0.00f, 0.53f);
+		colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.44f, 0.00f, 0.00f, 1.00f);
+		colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.66f, 0.00f, 0.00f, 1.00f);
+		colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(1.00f, 0.00f, 0.00f, 1.00f);
+		colors[ImGuiCol_CheckMark] = ImVec4(1.00f, 0.00f, 0.00f, 1.00f);
+		colors[ImGuiCol_SliderGrab] = ImVec4(0.88f, 0.24f, 0.24f, 1.00f);
+		colors[ImGuiCol_SliderGrabActive] = ImVec4(0.98f, 0.26f, 0.26f, 1.00f);
+		colors[ImGuiCol_Button] = ImVec4(0.98f, 0.26f, 0.26f, 0.40f);
+		colors[ImGuiCol_ButtonHovered] = ImVec4(0.98f, 0.26f, 0.26f, 1.00f);
+		colors[ImGuiCol_ButtonActive] = ImVec4(0.98f, 0.06f, 0.06f, 1.00f);
+		colors[ImGuiCol_Header] = ImVec4(0.98f, 0.26f, 0.26f, 0.31f);
+		colors[ImGuiCol_HeaderHovered] = ImVec4(0.98f, 0.26f, 0.26f, 0.80f);
+		colors[ImGuiCol_HeaderActive] = ImVec4(0.98f, 0.26f, 0.26f, 1.00f);
+		colors[ImGuiCol_Separator] = ImVec4(0.50f, 0.43f, 0.43f, 0.50f);
+		colors[ImGuiCol_SeparatorHovered] = ImVec4(0.75f, 0.10f, 0.10f, 0.78f);
+		colors[ImGuiCol_SeparatorActive] = ImVec4(0.75f, 0.10f, 0.10f, 1.00f);
+		colors[ImGuiCol_ResizeGrip] = ImVec4(0.98f, 0.26f, 0.26f, 0.20f);
+		colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.98f, 0.26f, 0.26f, 0.67f);
+		colors[ImGuiCol_ResizeGripActive] = ImVec4(0.98f, 0.26f, 0.26f, 0.95f);
+		colors[ImGuiCol_Tab] = ImVec4(0.58f, 0.18f, 0.18f, 0.86f);
+		colors[ImGuiCol_TabHovered] = ImVec4(0.98f, 0.26f, 0.26f, 0.80f);
+		colors[ImGuiCol_TabActive] = ImVec4(0.68f, 0.20f, 0.20f, 1.00f);
+		colors[ImGuiCol_TabUnfocused] = ImVec4(0.15f, 0.07f, 0.07f, 0.97f);
+		colors[ImGuiCol_TabUnfocusedActive] = ImVec4(0.42f, 0.14f, 0.14f, 1.00f);
+		colors[ImGuiCol_TableHeaderBg] = ImVec4(0.20f, 0.19f, 0.19f, 1.00f);
+		colors[ImGuiCol_TableBorderStrong] = ImVec4(0.35f, 0.31f, 0.31f, 1.00f);
+		colors[ImGuiCol_TableBorderLight] = ImVec4(0.25f, 0.23f, 0.23f, 1.00f);
+		colors[ImGuiCol_TextSelectedBg] = ImVec4(0.98f, 0.26f, 0.26f, 0.35f);
+		colors[ImGuiCol_NavHighlight] = ImVec4(0.98f, 0.26f, 0.26f, 1.00f);
+		
 		// Get path of dll and save imgui config there.
 		std::string ImguiConfigPath = utils::locations::GetCurrentWorkingDir();
 		ImguiConfigPath.append("\\ui.ini");
@@ -285,6 +312,10 @@ void  ui::hooking::GetPresent()
 
 void ui::hooking::UnhookUI()
 {
+	ImGui_ImplWin32_Shutdown();
+	ImGui_ImplDX11_Shutdown();
+	ImGui::DestroyContext();
+	
 	DetourDetach(&(LPVOID&)fnIDXGISwapChainPresent, (PBYTE)Present);
 }
 
