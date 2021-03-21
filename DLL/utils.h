@@ -6,4 +6,10 @@ namespace utils
 	public:
 		static std::string GetCurrentWorkingDir();
 	};
+
+	class DLL_Management
+	{
+	public:
+		static void Kill_DLL();
+	};
 }

@@ -111,7 +111,7 @@ void Main_Menu()
 		{
 			if (ImGui::MenuItem("Settings")) { /* Do stuff */ }
 			if (ImGui::MenuItem("Close")) { /* Do stuff */ }
-			if (ImGui::MenuItem("Detach DLL")) { /* Do stuff */ }
+			if (ImGui::MenuItem("Detach DLL")) { utils::DLL_Management::Kill_DLL(); }
 			ImGui::EndMenu();
 		}
 
