@@ -25,7 +25,7 @@ void Hook_Games()
 {
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
-	
+
 	//Hook game functions
 	haloreach::hooks::init_hooks();
 

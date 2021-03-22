@@ -14,7 +14,6 @@
 #include <imgui_impl_win32.h>
 #include <imgui_impl_dx11.h>
 
-
 // D3X HOOK DEFINITIONS// D3X HOOK DEFINITIONS
 typedef HRESULT(__fastcall* IDXGISwapChainPresent)(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags);
 typedef void(__stdcall* ID3D11DrawIndexed)(ID3D11DeviceContext* pContext, UINT IndexCount, UINT StartIndexLocation, INT BaseVertexLocation);
@@ -77,26 +76,24 @@ void WireframeMode(bool show)
 	if (rState != nullptr)
 	{
 		rState->GetDesc(&rDesc);    // get the desc of the state
-			if (show)
-			{
-				rDesc.FillMode = D3D11_FILL_WIREFRAME; // change the ONE setting
-			}
-			else
-			{
-				rDesc.FillMode = D3D11_FILL_SOLID; // change the ONE setting
-			}
+		if (show)
+		{
+			rDesc.FillMode = D3D11_FILL_WIREFRAME; // change the ONE setting
+		}
+		else
+		{
+			rDesc.FillMode = D3D11_FILL_SOLID; // change the ONE setting
+		}
 		// create a whole new rasterizer state
 		// d3d is the ID3D11Device
 		pDevice->CreateRasterizerState(&rDesc, &rState);
 
 		pContext->RSSetState(rState);    // set the new rasterizer state
 	}
-
 }
 
 void __stdcall hookD3D11DrawIndexed(ID3D11DeviceContext* pContext, UINT IndexCount, UINT StartIndexLocation, INT BaseVertexLocation)
 {
-
 	if (show_wireframe)
 	{
 		WireframeMode(true);
@@ -105,7 +102,7 @@ void __stdcall hookD3D11DrawIndexed(ID3D11DeviceContext* pContext, UINT IndexCou
 	{
 		WireframeMode(false);
 	}
-		
+
 	return fnID3D11DrawIndexed(pContext, IndexCount, StartIndexLocation, BaseVertexLocation);
 }
 
@@ -151,17 +148,17 @@ void Main_Menu()
 	{
 		if (ImGui::BeginTabItem("Halo Reach"))
 		{
-			//ImGui::Checkbox("Bottomless Clip", nullptr);
+			ImGui::Checkbox("Infinite Magazines", &haloreach::hooks::infinite_mags);
 			//ImGui::Checkbox("Player projectiles only.", nullptr);
 			ImGui::Checkbox("AI go crazy", &haloreach::hooks::ai_go_crazy);
 			//ImGui::Checkbox("AI Perception", nullptr);
-			
+
 			//ImGui::Checkbox("Medusa", nullptr);
 			//ImGui::SameLine();
 			//HelpMarker("This kills any ai that gets looked at by the player.");
-			
+
 			//ImGui::InputFloat("Game Speed",nullptr);
-			
+
 			ImGui::EndTabItem();
 		}
 		if (ImGui::BeginTabItem("Universal"))

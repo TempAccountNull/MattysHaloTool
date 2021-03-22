@@ -1,30 +1,22 @@
-//player_index_from_unit_index
-typedef int __fastcall player_index_from_unit_index(int a1);
-player_index_from_unit_index* player_index_from_unit_index_og = (player_index_from_unit_index*)((char*)GetModuleHandle(L"haloreach.dll") + 0x5CB6C);
+//weapon_take_inventory_rounds
+static bool __fastcall weapon_take_inventory_rounds(int a1);
+static decltype(weapon_take_inventory_rounds)* weapon_take_inventory_rounds__original = nullptr;
 
-//unit_start_running_blindly
-typedef __int64 __fastcall unit_start_running_blindly(unsigned __int16 unit);
-unit_start_running_blindly* run_blindly = (unit_start_running_blindly*)((char*)GetModuleHandle(L"haloreach.dll") + 0x484ED8);
-
-//unit_update_damage - great for making units do things
-static char __fastcall unit_update_damage(unsigned int unit);
-static decltype(unit_update_damage)* unit_update_damage__original = nullptr;
-
-void unit_update_damage_hook()
+void weapon_take_inventory_rounds_hook()
 {
-	long long* pointer = reinterpret_cast<long long*>((char*)GetModuleHandle(L"haloreach.dll") + 0x472B30);
-	unit_update_damage__original = reinterpret_cast<decltype(unit_update_damage)*>(pointer);
-	DetourAttach((PVOID*)&unit_update_damage__original, unit_update_damage);
+	long long* pointer = reinterpret_cast<long long*>((char*)GetModuleHandle("haloreach.dll") + haloreach::offsets::weapon_take_inventory_rounds_offset);
+	weapon_take_inventory_rounds__original = reinterpret_cast<decltype(weapon_take_inventory_rounds)*>(pointer);
+	DetourAttach((PVOID*)&weapon_take_inventory_rounds__original, weapon_take_inventory_rounds);
 }
 
-void unit_update_damage_dispose()
+void weapon_take_inventory_rounds_dispose()
 {
-	DetourDetach((PVOID*)&unit_update_damage__original, unit_update_damage);
+	DetourDetach((PVOID*)&weapon_take_inventory_rounds__original, weapon_take_inventory_rounds);
 }
 
-char __fastcall unit_update_damage(unsigned int unit)
+bool __fastcall weapon_take_inventory_rounds(int a1)
 {
-	char result = unit_update_damage__original(unit);
+	char result = weapon_take_inventory_rounds__original(a1);
 
 	return result;
 }
