@@ -14,7 +14,7 @@
 #include <imgui_impl_dx11.h>
 
 
-// D3X HOOK DEFINITIONS
+// D3X HOOK DEFINITIONS// D3X HOOK DEFINITIONS
 typedef HRESULT(__fastcall* IDXGISwapChainPresent)(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags);
 typedef void(__stdcall* ID3D11DrawIndexed)(ID3D11DeviceContext* pContext, UINT IndexCount, UINT StartIndexLocation, INT BaseVertexLocation);
 // Definition of WndProc Hook. Its here to avoid dragging dependencies on <windows.h> types.
@@ -34,10 +34,12 @@ UINT iIndexCount = 0;
 UINT iStartIndexLocation;
 INT iBaseVertexLocation;
 
+
 // Boolean
 bool ui::hooking::g_bInitialised = false;
 bool g_ShowMenu = false;
 bool ui::hooking::g_PresentHooked = false;
+bool show_wireframe = false;
 
 
 LRESULT CALLBACK hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -64,6 +66,12 @@ LRESULT CALLBACK hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 
 	return CallWindowProc(OriginalWndProcHandler, hWnd, uMsg, wParam, lParam);
+}
+
+void __stdcall hookD3D11DrawIndexed(ID3D11DeviceContext* pContext, UINT IndexCount, UINT StartIndexLocation, INT BaseVertexLocation)
+{
+
+	fnID3D11DrawIndexed(pContext, IndexCount, StartIndexLocation, BaseVertexLocation);
 }
 
 HRESULT GetDeviceAndCtxFromSwapchain(IDXGISwapChain* pSwapChain, ID3D11Device** ppDevice, ID3D11DeviceContext** ppContext)
@@ -100,7 +108,7 @@ void Main_Menu()
 		}
 		if (ImGui::BeginTabItem("Universal"))
 		{
-			ImGui::Checkbox("Wireframe Mode", nullptr);
+			ImGui::Checkbox("Wireframe Mode", &show_wireframe);
 			ImGui::EndTabItem();
 		}
 		ImGui::EndTabBar();
@@ -108,7 +116,28 @@ void Main_Menu()
 	ImGui::End();
 }
 
+void WireframeMode(bool)
+{
+	ID3D11RasterizerState* rState;
+	D3D11_RASTERIZER_DESC rDesc;
 
+	// cd3d is the ID3D11DeviceContext  
+	pContext->RSGetState(&rState); // retrieve the current state
+	rState->GetDesc(&rDesc);    // get the desc of the state
+	if (true)
+	{
+		rDesc.FillMode = D3D11_FILL_WIREFRAME; // change the ONE setting
+	}
+	else
+	{
+		rDesc.FillMode = D3D11_FILL_SOLID; // change the ONE setting
+	}
+	// create a whole new rasterizer state
+	// d3d is the ID3D11Device
+	pDevice->CreateRasterizerState(&rDesc, &rState);
+
+	pContext->RSSetState(rState);    // set the new rasterizer state
+}
 
 HRESULT __fastcall Present(IDXGISwapChain* pChain, UINT SyncInterval, UINT Flags)
 {
@@ -186,6 +215,8 @@ HRESULT __fastcall Present(IDXGISwapChain* pChain, UINT SyncInterval, UINT Flags
 
 		ImGui_ImplDX11_InvalidateDeviceObjects();
 
+		WireframeMode(true);
+
 		ID3D11Texture2D* pBackBuffer;
 
 		pChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
@@ -225,11 +256,25 @@ void ui::hooking::detourDirectXPresent()
 	DetourTransactionCommit();
 }
 
+void ui::hooking::detourDirectXDrawIndexed()
+{
+	DetourTransactionBegin();
+	DetourUpdateThread(GetCurrentThread());
+	// Detours the original fnIDXGISwapChainPresent with our Present fnID3D11DrawIndexed, (PBYTE)hookD3D11DrawIndexed
+	DetourAttach(&(LPVOID&)fnID3D11DrawIndexed, (PBYTE)hookD3D11DrawIndexed);
+	DetourTransactionCommit();
+}
+
 void ui::hooking::retrieveValues()
 {
 	DWORD_PTR hDxgi = (DWORD_PTR)GetModuleHandle("dxgi.dll");
 		
 	fnIDXGISwapChainPresent = (IDXGISwapChainPresent)((DWORD_PTR)hDxgi + 0x4670);
+
+	pDeviceContextVTable = (DWORD_PTR*)pContext;
+	pDeviceContextVTable = (DWORD_PTR*)pDeviceContextVTable[0];
+	//fnID3D11DrawIndexed
+	fnID3D11DrawIndexed = (ID3D11DrawIndexed)pDeviceContextVTable[12];
 }
 
 LRESULT CALLBACK DXGIMsgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) { return DefWindowProc(hwnd, uMsg, wParam, lParam); }
@@ -241,6 +286,7 @@ void ui::hooking::UnhookUI()
 	ImGui::DestroyContext();
 	
 	DetourDetach(&(LPVOID&)fnIDXGISwapChainPresent, (PBYTE)Present);
+	DetourDetach(&(LPVOID&)fnID3D11DrawIndexed, (PBYTE)hookD3D11DrawIndexed);
 }
 
 //BOOL APIENTRY DllMain(HMODULE hModule,

@@ -8,6 +8,7 @@ namespace ui
 		static bool g_bInitialised;
 		static void retrieveValues();
 		static void detourDirectXPresent();
+		static void detourDirectXDrawIndexed();
 		static void UnhookUI();
 	};
 }

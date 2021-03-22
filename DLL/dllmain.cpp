@@ -13,9 +13,13 @@ void Hook_UI()
 
 	// After this call, Present should be hooked and controlled by me.
 	ui::hooking::detourDirectXPresent();
+
+	
 	while (!ui::hooking::g_bInitialised) {
 		Sleep(1000);
 	}
+
+	ui::hooking::detourDirectXDrawIndexed();
 }
 
 int WINAPI main()
