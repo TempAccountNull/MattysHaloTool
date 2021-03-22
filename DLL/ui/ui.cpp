@@ -94,6 +94,7 @@ void WireframeMode(bool show)
 
 void __stdcall hookD3D11DrawIndexed(ID3D11DeviceContext* pContext, UINT IndexCount, UINT StartIndexLocation, INT BaseVertexLocation)
 {
+	//TODO: Make wireframe mode not affect the ui.
 	if (show_wireframe)
 	{
 		WireframeMode(true);
@@ -148,7 +149,8 @@ void Main_Menu()
 	{
 		if (ImGui::BeginTabItem("Halo Reach"))
 		{
-			ImGui::Checkbox("Infinite Magazines", &haloreach::hooks::infinite_mags);
+			ImGui::Checkbox("Infinite Ammo", &haloreach::hooks::infinite_ammo);
+			//ImGui::Checkbox("Infinite Ammo", &haloreach::hooks::infinite_ammo);
 			//ImGui::Checkbox("Player projectiles only.", nullptr);
 			ImGui::Checkbox("AI go crazy", &haloreach::hooks::ai_go_crazy);
 			//ImGui::Checkbox("AI Perception", nullptr);

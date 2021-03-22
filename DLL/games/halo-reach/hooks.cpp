@@ -6,7 +6,7 @@
 
 //Bools
 bool haloreach::hooks::ai_go_crazy = false;
-bool haloreach::hooks::infinite_mags = false;
+bool haloreach::hooks::infinite_ammo = false;
 
 //player_index_from_unit_index
 typedef int __fastcall player_index_from_unit_index(int a1);
@@ -16,31 +16,31 @@ player_index_from_unit_index* player_index_from_unit_index_og = (player_index_fr
 typedef __int64 __fastcall unit_start_running_blindly(unsigned __int16 unit);
 unit_start_running_blindly* run_blindly = (unit_start_running_blindly*)((char*)GetModuleHandle("haloreach.dll") + haloreach::offsets::unit_start_running_blindly_offset);
 
-//weapon_take_inventory_rounds
-static bool __fastcall weapon_take_inventory_rounds(int a1, int a2, int a3);
-static decltype(weapon_take_inventory_rounds)* weapon_take_inventory_rounds__original = nullptr;
+//weapon_has_infinite_ammo
+static bool __fastcall weapon_has_infinite_ammo(int a1);
+static decltype(weapon_has_infinite_ammo)* weapon_has_infinite_ammo__original = nullptr;
 
-void weapon_take_inventory_rounds_hook()
+void weapon_has_infinite_ammo_hook()
 {
-	long long* pointer = reinterpret_cast<long long*>((char*)GetModuleHandle("haloreach.dll") + haloreach::offsets::weapon_take_inventory_rounds_offset);
-	weapon_take_inventory_rounds__original = reinterpret_cast<decltype(weapon_take_inventory_rounds)*>(pointer);
-	DetourAttach((PVOID*)&weapon_take_inventory_rounds__original, weapon_take_inventory_rounds);
+	long long* pointer = reinterpret_cast<long long*>((char*)GetModuleHandle("haloreach.dll") + haloreach::offsets::weapon_has_infinite_ammo_offset);
+	weapon_has_infinite_ammo__original = reinterpret_cast<decltype(weapon_has_infinite_ammo)*>(pointer);
+	DetourAttach((PVOID*)&weapon_has_infinite_ammo__original, weapon_has_infinite_ammo);
 }
 
-void weapon_take_inventory_rounds_dispose()
+void weapon_has_infinite_ammo_dispose()
 {
-	DetourDetach((PVOID*)&weapon_take_inventory_rounds__original, weapon_take_inventory_rounds);
+	DetourDetach((PVOID*)&weapon_has_infinite_ammo__original, weapon_has_infinite_ammo);
 }
 
-bool __fastcall weapon_take_inventory_rounds(int a1, int a2, int a3)
+bool __fastcall weapon_has_infinite_ammo(int a1)
 {
-	if(!haloreach::hooks::infinite_mags)
+	if (!haloreach::hooks::infinite_ammo)
 	{
-		bool result = weapon_take_inventory_rounds__original(a1, a2, a3);
+		bool result = weapon_has_infinite_ammo__original(a1);
 		return result;
 	}
 
-	return 0;
+	return true;
 }
 
 //unit_update - great for making units do things
@@ -80,10 +80,12 @@ void haloreach::hooks::init_hooks()
 {
 	unit_update_hook();
 	weapon_take_inventory_rounds_hook();
+	weapon_has_infinite_ammo_hook();
 }
 
 void haloreach::hooks::deinit_hooks()
 {
 	unit_update_dispose();
 	weapon_take_inventory_rounds_dispose();
+	weapon_has_infinite_ammo_dispose();
 }
