@@ -7,6 +7,7 @@
 //Bools
 bool haloreach::hooks::ai_go_crazy = false;
 bool haloreach::hooks::infinite_ammo = false;
+bool haloreach::hooks::no_overheat = false;
 
 //player_index_from_unit_index
 typedef int __fastcall player_index_from_unit_index(int a1);
@@ -15,6 +16,30 @@ player_index_from_unit_index* player_index_from_unit_index_og = (player_index_fr
 //unit_start_running_blindly
 typedef __int64 __fastcall unit_start_running_blindly(unsigned __int16 unit);
 unit_start_running_blindly* run_blindly = (unit_start_running_blindly*)((char*)GetModuleHandle("haloreach.dll") + haloreach::offsets::unit_start_running_blindly_offset);
+
+//weapon_barrel_fire_weapon_heat
+static void __fastcall weapon_barrel_fire_weapon_heat(int a1, int a2);
+static decltype(weapon_barrel_fire_weapon_heat)* weapon_barrel_fire_weapon_heat__original = nullptr;
+
+void weapon_barrel_fire_weapon_heat_hook()
+{
+	long long* pointer = reinterpret_cast<long long*>((char*)GetModuleHandle("haloreach.dll") + haloreach::offsets::weapon_barrel_fire_weapon_heat_offset);
+	weapon_barrel_fire_weapon_heat__original = reinterpret_cast<decltype(weapon_barrel_fire_weapon_heat)*>(pointer);
+	DetourAttach((PVOID*)&weapon_barrel_fire_weapon_heat__original, weapon_barrel_fire_weapon_heat);
+}
+
+void weapon_barrel_fire_weapon_heat_dispose()
+{
+	DetourDetach((PVOID*)&weapon_barrel_fire_weapon_heat__original, weapon_barrel_fire_weapon_heat);
+}
+
+void __fastcall weapon_barrel_fire_weapon_heat(int a1, int a2)
+{
+	if (!haloreach::hooks::no_overheat)
+	{
+		weapon_barrel_fire_weapon_heat__original(a1, a2);
+	}
+}
 
 //weapon_has_infinite_ammo
 static bool __fastcall weapon_has_infinite_ammo(int a1);
@@ -80,10 +105,12 @@ void haloreach::hooks::init_hooks()
 {
 	unit_update_hook();
 	weapon_has_infinite_ammo_hook();
+	weapon_barrel_fire_weapon_heat_hook();
 }
 
 void haloreach::hooks::deinit_hooks()
 {
 	unit_update_dispose();
 	weapon_has_infinite_ammo_dispose();
+	weapon_barrel_fire_weapon_heat_dispose();
 }

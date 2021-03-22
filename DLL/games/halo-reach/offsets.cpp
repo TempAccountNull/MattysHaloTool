@@ -11,4 +11,6 @@ int haloreach::offsets::unit_update_offset = 0x4732E4;
 
 int haloreach::offsets::weapon_has_infinite_ammo_offset = 0x49E81C;
 
+int haloreach::offsets::weapon_barrel_fire_weapon_heat_offset = 0x49A008;
+
 int haloreach::offsets::player_index_from_unit_index_offset = 0x5CB6C;

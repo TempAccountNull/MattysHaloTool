@@ -9,5 +9,6 @@ namespace haloreach
 		static void deinit_hooks();
 		static bool ai_go_crazy;
 		static bool infinite_ammo;
+		static bool no_overheat;
 	};
 }
