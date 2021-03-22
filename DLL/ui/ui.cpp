@@ -150,7 +150,7 @@ void Main_Menu()
 		if (ImGui::BeginTabItem("Halo Reach"))
 		{
 			ImGui::Checkbox("Infinite Ammo", &haloreach::hooks::infinite_ammo);
-			//ImGui::Checkbox("Infinite Ammo", &haloreach::hooks::infinite_ammo);
+			//ImGui::Checkbox("No Overheat", &haloreach::hooks::no_overheat);
 			//ImGui::Checkbox("Player projectiles only.", nullptr);
 			ImGui::Checkbox("AI go crazy", &haloreach::hooks::ai_go_crazy);
 			//ImGui::Checkbox("AI Perception", nullptr);

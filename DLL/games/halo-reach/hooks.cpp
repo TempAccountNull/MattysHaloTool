@@ -79,13 +79,11 @@ bool __fastcall unit_update(int a1)
 void haloreach::hooks::init_hooks()
 {
 	unit_update_hook();
-	weapon_take_inventory_rounds_hook();
 	weapon_has_infinite_ammo_hook();
 }
 
 void haloreach::hooks::deinit_hooks()
 {
 	unit_update_dispose();
-	weapon_take_inventory_rounds_dispose();
 	weapon_has_infinite_ammo_dispose();
 }
