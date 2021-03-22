@@ -4,6 +4,7 @@
 #include "pch.h"
 
 #include "utils.h"
+#include "games/halo-reach/hooks.h"
 #include "ui/ui.h"
 
 void Hook_UI()
@@ -20,6 +21,17 @@ void Hook_UI()
 	ui::hooking::detourDirectXDrawIndexed();
 }
 
+void Hook_Games()
+{
+	DetourTransactionBegin();
+	DetourUpdateThread(GetCurrentThread());
+	
+	//Hook game functions
+	haloreach::hooks::init_hooks();
+
+	DetourTransactionCommit();
+}
+
 int WINAPI main()
 {
 	////Initialize Console
@@ -29,7 +41,7 @@ int WINAPI main()
 	////Redirect output to console
 	//freopen("CONIN$", "r", stdin);
 	//freopen("CONOUT$", "w", stdout);
-
+	Hook_Games();
 	Hook_UI();
 }
 

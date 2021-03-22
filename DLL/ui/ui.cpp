@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "ui.h"
 #include "../utils.h"
+#include "../games/halo-reach/hooks.h"
 
 // DX11 imports
 #pragma comment(lib, "D3dcompiler.lib")
@@ -12,6 +13,7 @@
 #include <imgui.h>
 #include <imgui_impl_win32.h>
 #include <imgui_impl_dx11.h>
+
 
 // D3X HOOK DEFINITIONS// D3X HOOK DEFINITIONS
 typedef HRESULT(__fastcall* IDXGISwapChainPresent)(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags);
@@ -149,7 +151,17 @@ void Main_Menu()
 	{
 		if (ImGui::BeginTabItem("Halo Reach"))
 		{
-			ImGui::Text("HaloReachShit!");
+			//ImGui::Checkbox("Bottomless Clip", nullptr);
+			//ImGui::Checkbox("Player projectiles only.", nullptr);
+			ImGui::Checkbox("AI go crazy", &haloreach::hooks::ai_go_crazy);
+			//ImGui::Checkbox("AI Perception", nullptr);
+			
+			//ImGui::Checkbox("Medusa", nullptr);
+			//ImGui::SameLine();
+			//HelpMarker("This kills any ai that gets looked at by the player.");
+			
+			//ImGui::InputFloat("Game Speed",nullptr);
+			
 			ImGui::EndTabItem();
 		}
 		if (ImGui::BeginTabItem("Universal"))

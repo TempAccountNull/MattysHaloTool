@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "utils.h"
+
+#include "games/halo-reach/hooks.h"
 #include "ui/ui.h"
 
 // Misc Imports
@@ -19,6 +21,7 @@ void utils::DLL_Management::Kill_DLL()
 	DetourUpdateThread(GetCurrentThread());
 	// Put unhooking shit here
 	ui::hooking::UnhookUI();
+	haloreach::hooks::deinit_hooks();
 	DetourTransactionCommit();
 
 	//Sleep for a lil bit
