@@ -19,9 +19,6 @@
 //Detours
 #include "libraries/Detours-4.0.1/include/detours.h"
 
-
-
-
 // Other
 #include <cstdio>
 

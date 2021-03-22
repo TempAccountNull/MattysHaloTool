@@ -3,18 +3,16 @@
 
 #include "pch.h"
 
-
 #include "utils.h"
 #include "ui/ui.h"
 
 void Hook_UI()
 {
-		ui::hooking::retrieveValues();
+	ui::hooking::retrieveValues();
 
 	// After this call, Present should be hooked and controlled by me.
 	ui::hooking::detourDirectXPresent();
 
-	
 	while (!ui::hooking::g_bInitialised) {
 		Sleep(1000);
 	}
@@ -24,17 +22,14 @@ void Hook_UI()
 
 int WINAPI main()
 {
+	////Initialize Console
+	//AllocConsole();
+	//AttachConsole(GetCurrentProcessId());
 
-	#ifdef DEBUG
-	//Initialize Console
-	AllocConsole();
-	AttachConsole(GetCurrentProcessId());
+	////Redirect output to console
+	//freopen("CONIN$", "r", stdin);
+	//freopen("CONOUT$", "w", stdout);
 
-	//Redirect output to console
-	freopen("CONIN$", "r", stdin);
-	freopen("CONOUT$", "w", stdout);
-	#endif
-	
 	Hook_UI();
 }
 
