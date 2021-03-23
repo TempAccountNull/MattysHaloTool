@@ -32,6 +32,7 @@ void Hook_Games()
 	DetourTransactionCommit();
 }
 
+
 int WINAPI main()
 {
 	//Initialize Console

@@ -9,6 +9,7 @@ bool haloreach::hooks::ai_go_crazy = false;
 bool haloreach::hooks::infinite_ammo = false;
 bool haloreach::hooks::no_overheat = false;
 bool haloreach::hooks::player_proj_only = false;
+bool haloreach::hooks::ai_null_perception = false;
 
 //weapon_get_owner_unit_index
 typedef int __fastcall weapon_get_owner_unit_index(int a1);
@@ -21,6 +22,30 @@ player_index_from_unit_index* player_index_from_unit_index_og = (player_index_fr
 //unit_start_running_blindly
 typedef int __fastcall unit_start_running_blindly(int unit);
 unit_start_running_blindly* run_blindly = (unit_start_running_blindly*)((char*)GetModuleHandle("haloreach.dll") + haloreach::offsets::unit_start_running_blindly_offset);
+
+//actor_perception_set_target
+static void __fastcall actor_perception_set_target(int a1, int a2);
+static decltype(actor_perception_set_target)* actor_perception_set_target__original = nullptr;
+
+void actor_perception_set_target_hook()
+{
+	long long* pointer = reinterpret_cast<long long*>((char*)GetModuleHandle("haloreach.dll") + haloreach::offsets::actor_perception_set_target_offset);
+	actor_perception_set_target__original = reinterpret_cast<decltype(actor_perception_set_target)*>(pointer);
+	DetourAttach((PVOID*)&actor_perception_set_target__original, actor_perception_set_target);
+}
+
+void actor_perception_set_target_dispose()
+{
+	DetourDetach((PVOID*)&actor_perception_set_target__original, actor_perception_set_target);
+}
+
+void __fastcall actor_perception_set_target(int a1, int a2)
+{
+	if (!haloreach::hooks::ai_null_perception)
+	{
+		actor_perception_set_target__original(a1, a2);
+	}
+}
 
 //weapon_barrel_create_projectiles
 static void __fastcall weapon_barrel_create_projectiles(int a1, __int16 a2, const struct s_predicted_weapon_fire_data near* a3, bool a4, bool a5);
@@ -147,6 +172,7 @@ void haloreach::hooks::init_hooks()
 	weapon_has_infinite_ammo_hook();
 	weapon_barrel_fire_weapon_heat_hook();
 	weapon_barrel_create_projectiles_hook();
+	actor_perception_set_target_hook();
 }
 
 void haloreach::hooks::deinit_hooks()
@@ -155,4 +181,5 @@ void haloreach::hooks::deinit_hooks()
 	weapon_has_infinite_ammo_dispose();
 	weapon_barrel_fire_weapon_heat_dispose();
 	weapon_barrel_create_projectiles_dispose();
+	actor_perception_set_target_dispose();
 }

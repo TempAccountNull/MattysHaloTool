@@ -7,6 +7,7 @@ namespace haloreach
 		static int unit_start_running_blindly_offset;
 
 		static int unit_update_offset;
+		static int actor_perception_set_target_offset;
 
 		static int weapon_has_infinite_ammo_offset;
 		static int weapon_barrel_fire_weapon_heat_offset;

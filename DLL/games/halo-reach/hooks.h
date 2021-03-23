@@ -11,5 +11,6 @@ namespace haloreach
 		static bool infinite_ammo;
 		static bool no_overheat;
 		static bool player_proj_only;
+		static bool ai_null_perception;
 	};
 }

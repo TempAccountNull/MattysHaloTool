@@ -160,7 +160,10 @@ void Main_Menu()
 			HelpMarker("This causes any weapon that does not belong to the player to not fire any projectiles.\nWorks with vehicles.");
 			
 			ImGui::Checkbox("AI go crazy", &haloreach::hooks::ai_go_crazy);
-			//ImGui::Checkbox("AI Perception", nullptr);
+			ImGui::SameLine();
+			HelpMarker("Makes all units that are not in a vehicle run around like mad, players not included.");
+			
+			ImGui::Checkbox("AI No Perception", &haloreach::hooks::ai_null_perception);
 
 			//ImGui::Checkbox("Medusa", nullptr);
 			//ImGui::SameLine();
