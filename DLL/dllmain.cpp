@@ -34,7 +34,7 @@ void Hook_Games()
 
 int WINAPI main()
 {
-	////Initialize Console
+	//Initialize Console
 	//AllocConsole();
 	//AttachConsole(GetCurrentProcessId());
 

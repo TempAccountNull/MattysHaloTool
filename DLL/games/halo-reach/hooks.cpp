@@ -2,20 +2,60 @@
 #include "hooks.h"
 #include "offsets.h"
 
-//TODO: Hook game functions here!
+//NOTE: If you get a stack overflow error, you might be using the wrong offset for a function.
 
 //Bools
 bool haloreach::hooks::ai_go_crazy = false;
 bool haloreach::hooks::infinite_ammo = false;
 bool haloreach::hooks::no_overheat = false;
+bool haloreach::hooks::player_proj_only = false;
+
+//weapon_get_owner_unit_index
+typedef int __fastcall weapon_get_owner_unit_index(int a1);
+weapon_get_owner_unit_index* weapon_get_owner_unit_index_og = (weapon_get_owner_unit_index*)((char*)GetModuleHandle("haloreach.dll") + haloreach::offsets::weapon_get_owner_unit_index_offset);
 
 //player_index_from_unit_index
 typedef int __fastcall player_index_from_unit_index(int a1);
 player_index_from_unit_index* player_index_from_unit_index_og = (player_index_from_unit_index*)((char*)GetModuleHandle("haloreach.dll") + haloreach::offsets::player_index_from_unit_index_offset);
 
 //unit_start_running_blindly
-typedef __int64 __fastcall unit_start_running_blindly(unsigned __int16 unit);
+typedef int __fastcall unit_start_running_blindly(int unit);
 unit_start_running_blindly* run_blindly = (unit_start_running_blindly*)((char*)GetModuleHandle("haloreach.dll") + haloreach::offsets::unit_start_running_blindly_offset);
+
+//weapon_barrel_create_projectiles
+static void __fastcall weapon_barrel_create_projectiles(int a1, __int16 a2, const struct s_predicted_weapon_fire_data near* a3, bool a4, bool a5);
+static decltype(weapon_barrel_create_projectiles)* weapon_barrel_create_projectiles__original = nullptr;
+
+void weapon_barrel_create_projectiles_hook()
+{
+	long long* pointer = reinterpret_cast<long long*>((char*)GetModuleHandle("haloreach.dll") + haloreach::offsets::weapon_barrel_create_projectiles_offset);
+	weapon_barrel_create_projectiles__original = reinterpret_cast<decltype(weapon_barrel_create_projectiles)*>(pointer);
+	DetourAttach((PVOID*)&weapon_barrel_create_projectiles__original, weapon_barrel_create_projectiles);
+}
+
+void weapon_barrel_create_projectiles_dispose()
+{
+	DetourDetach((PVOID*)&weapon_barrel_create_projectiles__original, weapon_barrel_create_projectiles);
+}
+
+void __fastcall weapon_barrel_create_projectiles(int a1, __int16 a2, const struct s_predicted_weapon_fire_data near* a3, bool a4, bool a5)
+{
+	if (haloreach::hooks::player_proj_only)
+	{
+		//Check if unit firing weapon is player.
+		int unit = weapon_get_owner_unit_index_og(a1);
+		int unit_player_index = player_index_from_unit_index_og(unit);
+		if (unit_player_index != -1)
+		{
+			weapon_barrel_create_projectiles__original(a1, a2, a3, a4, a5);
+		}
+	}
+	else
+	{
+		weapon_barrel_create_projectiles__original(a1, a2, a3, a4, a5);
+	}
+
+}
 
 //weapon_barrel_fire_weapon_heat
 static void __fastcall weapon_barrel_fire_weapon_heat(int a1, int a2);
@@ -106,6 +146,7 @@ void haloreach::hooks::init_hooks()
 	unit_update_hook();
 	weapon_has_infinite_ammo_hook();
 	weapon_barrel_fire_weapon_heat_hook();
+	weapon_barrel_create_projectiles_hook();
 }
 
 void haloreach::hooks::deinit_hooks()
@@ -113,4 +154,5 @@ void haloreach::hooks::deinit_hooks()
 	unit_update_dispose();
 	weapon_has_infinite_ammo_dispose();
 	weapon_barrel_fire_weapon_heat_dispose();
+	weapon_barrel_create_projectiles_dispose();
 }

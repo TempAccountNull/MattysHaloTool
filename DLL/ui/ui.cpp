@@ -154,7 +154,11 @@ void Main_Menu()
 			HelpMarker("Behaves the same as the infinite ammo multi-player setting.");
 
 			ImGui::Checkbox("No Weapon Overheat", &haloreach::hooks::no_overheat);
-			//ImGui::Checkbox("Player projectiles only.", nullptr);
+			
+			ImGui::Checkbox("Player projectiles only.", &haloreach::hooks::player_proj_only);
+			ImGui::SameLine();
+			HelpMarker("This causes any weapon that does not belong to the player to not fire any projectiles.\nWorks with vehicles.");
+			
 			ImGui::Checkbox("AI go crazy", &haloreach::hooks::ai_go_crazy);
 			//ImGui::Checkbox("AI Perception", nullptr);
 

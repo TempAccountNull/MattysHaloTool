@@ -1,3 +1,4 @@
+#pragma once
 namespace haloreach
 {
 	class offsets
@@ -11,5 +12,7 @@ namespace haloreach
 		static int weapon_barrel_fire_weapon_heat_offset;
 
 		static int player_index_from_unit_index_offset;
+		static int weapon_get_owner_unit_index_offset;
+		static int weapon_barrel_create_projectiles_offset;
 	};
 }
