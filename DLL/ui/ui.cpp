@@ -57,9 +57,13 @@ LRESULT CALLBACK hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		}
 	}
 
+	//TODO: Fix mouse input being passed into mcc.
+	io.MouseDrawCursor = false;
+	
 	if (g_ShowMenu)
 	{
 		ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam);
+		io.MouseDrawCursor = true;
 		return true;
 	}
 
@@ -154,15 +158,15 @@ void Main_Menu()
 			HelpMarker("Behaves the same as the infinite ammo multi-player setting.");
 
 			ImGui::Checkbox("No Weapon Overheat", &haloreach::hooks::no_overheat);
-			
+
 			ImGui::Checkbox("Player projectiles only.", &haloreach::hooks::player_proj_only);
 			ImGui::SameLine();
 			HelpMarker("This causes any weapon that does not belong to the player to not fire any projectiles.\nWorks with vehicles.");
-			
+
 			ImGui::Checkbox("AI go crazy", &haloreach::hooks::ai_go_crazy);
 			ImGui::SameLine();
 			HelpMarker("Makes all units that are not in a vehicle run around like mad, players not included.");
-			
+
 			ImGui::Checkbox("AI No Perception", &haloreach::hooks::ai_null_perception);
 
 			//ImGui::Checkbox("Medusa", nullptr);
@@ -196,9 +200,11 @@ HRESULT __fastcall Present(IDXGISwapChain* pChain, UINT SyncInterval, UINT Flags
 
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
-		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard | ImGuiConfigFlags_NavEnableSetMousePos | ImGuiConfigFlags_NavEnableGamepad;
 		// Not needed right now.
 
+		
+		
 		// Style
 		ImGuiStyle& style = ImGui::GetStyle();
 		style.WindowTitleAlign = ImVec2(0.5f, 0.5f);
