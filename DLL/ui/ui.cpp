@@ -134,6 +134,8 @@ static void HelpMarker(const char* desc)
 	}
 }
 
+float game_speed = 1.0f;
+
 void Main_Menu()
 {
 	ImGui::Begin("Matthew's Halo Tool!", &g_ShowMenu, ImGuiWindowFlags_MenuBar);
@@ -168,12 +170,21 @@ void Main_Menu()
 			HelpMarker("Makes all units that are not in a vehicle run around like mad, players not included.");
 
 			ImGui::Checkbox("AI No Perception", &haloreach::hooks::ai_null_perception);
+			ImGui::SameLine();
+			HelpMarker("Makes actor_perception_set_target return void meaning that the ai will not be able to notice much.");
 
+			if(ImGui::InputFloat("Game Speed", &game_speed))
+			{
+				haloreach::hooks::game_speed = game_speed;
+			}
+			ImGui::SameLine();
+			HelpMarker("1.0 is default value. Do not go below 0.1!");
+			
 			//ImGui::Checkbox("Medusa", nullptr);
 			//ImGui::SameLine();
 			//HelpMarker("This kills any ai that gets looked at by the player.");
 
-			//ImGui::InputFloat("Game Speed",nullptr);
+			
 
 			ImGui::EndTabItem();
 		}

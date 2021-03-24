@@ -12,5 +12,6 @@ namespace haloreach
 		static bool no_overheat;
 		static bool player_proj_only;
 		static bool ai_null_perception;
+		static float game_speed;
 	};
 }

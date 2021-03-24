@@ -9,6 +9,8 @@ int haloreach::offsets::unit_start_running_blindly_offset = 0x484ED8;
 
 int haloreach::offsets::unit_update_offset = 0x4732E4;
 
+int haloreach::offsets::game_update_offset = 0x49F7C;
+
 int haloreach::offsets::actor_perception_set_target_offset = 0x5E1BAC;
 
 int haloreach::offsets::weapon_has_infinite_ammo_offset = 0x49E81C;
@@ -18,5 +20,9 @@ int haloreach::offsets::weapon_barrel_fire_weapon_heat_offset = 0x49A008;
 int haloreach::offsets::weapon_barrel_create_projectiles_offset = 0x49B324;
 
 int haloreach::offsets::player_index_from_unit_index_offset = 0x5CB6C;
+
+int haloreach::offsets::game_time_set_rate_scale_direct_offset = 0x5251C;
+
+int haloreach::offsets::game_time_get_speed_offset = 0x51DB8;
 
 int haloreach::offsets::weapon_get_owner_unit_index_offset = 0x496D00;

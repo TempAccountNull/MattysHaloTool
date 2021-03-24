@@ -11,6 +11,18 @@ bool haloreach::hooks::no_overheat = false;
 bool haloreach::hooks::player_proj_only = false;
 bool haloreach::hooks::ai_null_perception = false;
 
+//Floats
+float haloreach::hooks::game_speed = 1.0;
+
+
+//game_time_get_speed
+typedef float __fastcall game_time_get_speed();
+game_time_get_speed* game_time_get_speed_og = (game_time_get_speed*)((char*)GetModuleHandle("haloreach.dll") + haloreach::offsets::game_time_get_speed_offset);
+
+//game_time_set_rate_scale_direct
+typedef __int64 __fastcall game_time_set_rate_scale_direct(float a1);
+game_time_set_rate_scale_direct* game_time_set_rate_scale_direct_og = (game_time_set_rate_scale_direct*)((char*)GetModuleHandle("haloreach.dll") + haloreach::offsets::game_time_set_rate_scale_direct_offset);
+
 //weapon_get_owner_unit_index
 typedef int __fastcall weapon_get_owner_unit_index(int a1);
 weapon_get_owner_unit_index* weapon_get_owner_unit_index_og = (weapon_get_owner_unit_index*)((char*)GetModuleHandle("haloreach.dll") + haloreach::offsets::weapon_get_owner_unit_index_offset);
@@ -79,7 +91,6 @@ void __fastcall weapon_barrel_create_projectiles(int a1, __int16 a2, const struc
 	{
 		weapon_barrel_create_projectiles__original(a1, a2, a3, a4, a5);
 	}
-
 }
 
 //weapon_barrel_fire_weapon_heat
@@ -133,6 +144,31 @@ bool __fastcall weapon_has_infinite_ammo(int a1)
 	return true;
 }
 
+//game_update
+static void __fastcall game_update(int a1, float near* a2);
+static decltype(game_update)* game_update__original = nullptr;
+
+void game_update_hook()
+{
+	long long* pointer = reinterpret_cast<long long*>((char*)GetModuleHandle("haloreach.dll") + haloreach::offsets::game_update_offset);
+	game_update__original = reinterpret_cast<decltype(game_update)*>(pointer);
+	DetourAttach((PVOID*)&game_update__original, game_update);
+}
+
+void game_update_dispose()
+{
+	DetourDetach((PVOID*)&game_update__original, game_update);
+}
+
+void __fastcall game_update(int a1, float near* a2)
+{
+
+	//TODO: Possibly not put these things in a constant loop?
+	game_time_set_rate_scale_direct_og(haloreach::hooks::game_speed);
+	
+	game_update__original(a1,a2);
+}
+
 //unit_update - great for making units do things
 static bool __fastcall unit_update(int a1);
 static decltype(unit_update)* unit_update__original = nullptr;
@@ -168,6 +204,7 @@ bool __fastcall unit_update(int a1)
 
 void haloreach::hooks::init_hooks()
 {
+	game_update_hook();
 	unit_update_hook();
 	weapon_has_infinite_ammo_hook();
 	weapon_barrel_fire_weapon_heat_hook();
@@ -177,6 +214,7 @@ void haloreach::hooks::init_hooks()
 
 void haloreach::hooks::deinit_hooks()
 {
+	game_update_dispose();
 	unit_update_dispose();
 	weapon_has_infinite_ammo_dispose();
 	weapon_barrel_fire_weapon_heat_dispose();
