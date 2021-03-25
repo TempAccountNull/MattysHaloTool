@@ -1,4 +1,5 @@
 // ReSharper disable CppUseAuto
+// ReSharper disable CppClangTidyMiscMisplacedConst
 #include <iostream>
 #include <Windows.h>
 #include <TlHelp32.h>
@@ -9,18 +10,16 @@ bool g_close_on_inject;
 
 void clear_screen()
 {
-	HANDLE                     h_std_out;
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
 	DWORD                      count;
-	DWORD                      cell_count;
-	COORD                      home_coords = { 0, 0 };
+	const COORD                home_coords = { 0, 0 };
 
-	h_std_out = GetStdHandle(STD_OUTPUT_HANDLE);
+	const HANDLE h_std_out = GetStdHandle(STD_OUTPUT_HANDLE);
 	if (h_std_out == INVALID_HANDLE_VALUE) return;
 
 	/* Get the number of cells in the current buffer */
 	if (!GetConsoleScreenBufferInfo(h_std_out, &csbi)) return;
-	cell_count = csbi.dwSize.X * csbi.dwSize.Y;
+	const DWORD cell_count = csbi.dwSize.X * csbi.dwSize.Y;
 
 	/* Fill the entire buffer with spaces */
 	if (!FillConsoleOutputCharacter(
@@ -47,12 +46,12 @@ void clear_screen()
 DWORD get_proc_id(const char* proc_name)
 {
 	DWORD proc_id = 0;
-	HANDLE h_snap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+	const HANDLE h_snap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 
 	if (h_snap != INVALID_HANDLE_VALUE)
 	{
 		PROCESSENTRY32 proc_entry;
-		proc_entry.dwSize = sizeof(proc_entry);
+		proc_entry.dwSize = sizeof proc_entry;
 
 		if (Process32First(h_snap, &proc_entry))
 		{
@@ -70,10 +69,10 @@ DWORD get_proc_id(const char* proc_name)
 	return proc_id;
 }
 
-bool file_exists(std::string filename)
+bool file_exists(const std::string& filename)
 {
 	FILE* file = nullptr;
-	if (fopen_s(&file, filename.c_str(), "r") == EINVAL, file)
+	if (fopen_s(&file, filename.c_str(), "r"))
 	{
 		fclose(file);
 		return true;
@@ -85,33 +84,32 @@ bool file_exists(std::string filename)
 std::string get_current_working_dir()
 {
 	char result[MAX_PATH];
-	std::string full_path_of_exe = std::string(result, GetModuleFileName(NULL, result, MAX_PATH));
+	const std::string full_path_of_exe = std::string(result, GetModuleFileName(nullptr, result, MAX_PATH));
 	std::string stripped_path = full_path_of_exe.substr(0, full_path_of_exe.find_last_of("\\/"));
 	return stripped_path;
 }
 
-std::string get_current_exe_name(bool include_file_extension = false)
+std::string get_current_exe_name(const bool include_file_extension = false)
 {
 	char result[MAX_PATH];
-	std::string full_path_of_exe = std::string(result, GetModuleFileName(NULL, result, MAX_PATH));
-	
-	size_t index = full_path_of_exe.find_last_of("\\/");
+	const std::string full_path_of_exe = std::string(result, GetModuleFileName(nullptr, result, MAX_PATH));
+
+	const size_t index = full_path_of_exe.find_last_of("\\/");
 	std::string file_with_ext = full_path_of_exe.substr(index + 1);
 
-	if(!include_file_extension)
+	if (!include_file_extension)
 	{
 		std::string file_without_ext = file_with_ext.substr(0, file_with_ext.find_last_of('.'));
 		return file_without_ext;
 	}
-	
-	
+
 	return file_with_ext;
 }
 
-void inject(std::string dll_path, DWORD proc_id)
+void inject(const std::string& dll_path, const DWORD proc_id)
 {
 	const char* dll_filename = dll_path.c_str();
-	HANDLE h_proc = OpenProcess(PROCESS_ALL_ACCESS, 0, proc_id);
+	const HANDLE h_proc = OpenProcess(PROCESS_ALL_ACCESS, 0, proc_id);
 
 	if (h_proc && h_proc != INVALID_HANDLE_VALUE)
 	{
@@ -119,7 +117,7 @@ void inject(std::string dll_path, DWORD proc_id)
 
 		WriteProcessMemory(h_proc, loc, dll_filename, strlen(dll_filename) + 1, nullptr);
 
-		HANDLE h_thread = CreateRemoteThread(h_proc, nullptr, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(LoadLibraryA), loc, 0, nullptr);
+		const HANDLE h_thread = CreateRemoteThread(h_proc, nullptr, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(LoadLibraryA), loc, 0, nullptr);
 
 		if (h_thread)
 		{
@@ -133,29 +131,27 @@ void inject(std::string dll_path, DWORD proc_id)
 	}
 }
 
-void create_config(LPCSTR ini_path)
+void create_config(const LPCSTR ini_path)
 {
 	WritePrivateProfileString("Super Cool Injector", "closeoninject", "true", ini_path);
 }
 
-
 void read_config()
 {
-	std::string ini_path = get_current_working_dir() + "\\" + get_current_exe_name(false) + ".ini";
-	
+	const std::string ini_path = get_current_working_dir() + "\\" + get_current_exe_name(false) + ".ini";
+
 	if (file_exists(ini_path))
 	{
-		
 		char closeoninject_string[6];
 		GetPrivateProfileString("Super Cool Injector", "closeoninject", "true", closeoninject_string, 6, ini_path.c_str());
 
 		//TODO: Ugly code, there is probably a better way of doing this without using third-party libs.
-		
+
 		if (!_stricmp(closeoninject_string, "true") || !_stricmp(closeoninject_string, "false"))
 		{
 			//Valid Config
 
-			if(!_stricmp(closeoninject_string, "true"))
+			if (!_stricmp(closeoninject_string, "true"))
 			{
 				g_close_on_inject = true;
 			}
@@ -163,7 +159,6 @@ void read_config()
 			{
 				g_close_on_inject = false;
 			}
-			
 		}
 		else
 		{
@@ -171,7 +166,6 @@ void read_config()
 			std::cin.get();
 			exit(1);
 		}
-
 	}
 	else
 	{
@@ -179,12 +173,11 @@ void read_config()
 	}
 }
 
-int main()
+int main()  // NOLINT(bugprone-exception-escape)
 {
-
 	//Read/Write Config
 	read_config();
-	
+
 	// Init variables
 	const char* proc_name = "MCC-Win64-Shipping.exe";
 	DWORD proc_id = 0;
@@ -192,15 +185,12 @@ int main()
 	// Get path to dll.
 
 	const char* dll_name = "\\DLL.dll";
-	std::string dll_path = get_current_working_dir() + dll_name;
+	const std::string dll_path = get_current_working_dir() + dll_name;
 
-
-	
 	// Main code
 
-	while(true)
+	while (true)
 	{
-		
 		if (file_exists(dll_path))
 		{
 			clear_screen();
@@ -229,14 +219,13 @@ int main()
 			break;
 		}
 
-		// Dont do anything until program is closed.
+		// Don't do anything until program is closed.
 		while (proc_id)
 		{
 			proc_id = get_proc_id(proc_name);
 			Sleep(5000);
 		}
 	}
-
 
 	return 0;
 }

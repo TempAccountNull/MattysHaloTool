@@ -1,4 +1,4 @@
-// dllmain.cpp : Defines the entry point for the DLL application.
+// dll_main.cpp : Defines the entry point for the DLL application.
 // TODO: Unlock cursor when using menu.
 
 #include "pch.h"
@@ -7,21 +7,21 @@
 #include "games/halo-reach/hooks.h"
 #include "ui/ui.h"
 
-void Hook_UI()
+void hook_ui()
 {
-	ui::hooking::retrieveValues();
+	ui::hooking::retrieve_values();
 
 	// After this call, Present should be hooked and controlled by me.
-	ui::hooking::detourDirectXPresent();
+	ui::hooking::detour_directx_present();
 
-	while (!ui::hooking::g_bInitialised) {
+	while (!ui::hooking::g_b_initialized) {
 		Sleep(1000);
 	}
 
-	ui::hooking::detourDirectXDrawIndexed();
+	ui::hooking::detour_directx_draw_indexed();
 }
 
-void Hook_Games()
+void hook_games()
 {
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
@@ -32,7 +32,6 @@ void Hook_Games()
 	DetourTransactionCommit();
 }
 
-
 int WINAPI main()
 {
 	//Initialize Console
@@ -42,8 +41,8 @@ int WINAPI main()
 	////Redirect output to console
 	//freopen("CONIN$", "r", stdin);
 	//freopen("CONOUT$", "w", stdout);
-	Hook_Games();
-	Hook_UI();
+	hook_games();
+	hook_ui();
 }
 
 //BOOL APIENTRY DllMain(HMODULE hModule,
@@ -67,16 +66,16 @@ int WINAPI main()
 //	return TRUE;
 //}
 
-BOOL WINAPI DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
+BOOL WINAPI dll_main(const HMODULE h_module, const DWORD dw_reason, [[maybe_unused]] LPVOID lp_reserved)
 {
-	if (dwReason == DLL_PROCESS_ATTACH)
+	if (dw_reason == DLL_PROCESS_ATTACH)
 	{
-		DisableThreadLibraryCalls(hModule);
-		CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)main, NULL, NULL, NULL);
+		DisableThreadLibraryCalls(h_module);
+		CreateThread(nullptr, NULL, reinterpret_cast<LPTHREAD_START_ROUTINE>(main), nullptr, NULL, nullptr);  // NOLINT(clang-diagnostic-main)
 	}
-	else if (dwReason == DLL_PROCESS_DETACH)
+	else if (dw_reason == DLL_PROCESS_DETACH)
 	{
-		utils::DLL_Management::Kill_DLL();
+		utils::dll_management::kill_dll();
 	}
 
 	return TRUE;

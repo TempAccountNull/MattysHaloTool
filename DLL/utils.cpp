@@ -7,24 +7,23 @@
 // Misc Imports
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 
-std::string utils::locations::GetCurrentWorkingDir()
+std::string utils::locations::get_current_working_dir()
 {
 	char result[MAX_PATH];
-	std::string fullpathofdll = std::string(result, GetModuleFileName((HINSTANCE)&__ImageBase, result, MAX_PATH));
+	const std::string fullpathofdll = std::string(result, GetModuleFileName(reinterpret_cast<HINSTANCE>(&__ImageBase), result, MAX_PATH));
 	std::string strippedpath = fullpathofdll.substr(0, fullpathofdll.find_last_of("\\/"));
 	return strippedpath;
 }
 
-void utils::DLL_Management::Kill_DLL()
+void utils::dll_management::kill_dll()
 {
-
 	// Put unhooking shit here
-	ui::hooking::UnhookUI();
+	ui::hooking::unhook_ui();
 	haloreach::hooks::deinit_hooks();
 
 	//Sleep for a lil bit
 	Sleep(1000);
 
 	//Detach DLL
-	FreeLibraryAndExitThread((HINSTANCE)&__ImageBase, NULL);
+	FreeLibraryAndExitThread(reinterpret_cast<HINSTANCE>(&__ImageBase), NULL);
 }

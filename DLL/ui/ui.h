@@ -4,11 +4,11 @@ namespace ui
 	class hooking
 	{
 	public:
-		static bool g_PresentHooked;
-		static bool g_bInitialised;
-		static void retrieveValues();
-		static void detourDirectXPresent();
-		static void detourDirectXDrawIndexed();
-		static void UnhookUI();
+		static bool g_present_hooked;
+		static bool g_b_initialized;
+		static void retrieve_values();
+		static void detour_directx_present();
+		static void detour_directx_draw_indexed();
+		static void unhook_ui();
 	};
 }

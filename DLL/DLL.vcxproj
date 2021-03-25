@@ -104,7 +104,7 @@
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="dll_main.cpp" />
     <ClCompile Include="games\halo-reach\hooks.cpp" />
     <ClCompile Include="games\halo-reach\offsets.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>

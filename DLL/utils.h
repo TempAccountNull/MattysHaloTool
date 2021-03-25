@@ -4,12 +4,12 @@ namespace utils
 	class locations
 	{
 	public:
-		static std::string GetCurrentWorkingDir();
+		static std::string get_current_working_dir();
 	};
 
-	class DLL_Management
+	class dll_management
 	{
 	public:
-		static void Kill_DLL();
+		static void kill_dll();
 	};
 }
