@@ -140,16 +140,16 @@ float game_speed = 1.0f;
 void main_menu()
 {
 	ImGui::Begin("Matthew's Halo Tool!", &g_show_menu, ImGuiWindowFlags_MenuBar);
-	if (ImGui::BeginMenuBar())
-	{
-		if (ImGui::BeginMenu("Menu"))
-		{
-			if (ImGui::MenuItem("Settings")) { /* Open Settings Window WIP */ }
-			if (ImGui::MenuItem("Detach DLL")) { /*utils::DLL_Management::Kill_DLL();*/ }
-			ImGui::EndMenu();
-		}
-		ImGui::EndMenuBar();
-	}
+	//if (ImGui::BeginMenuBar())
+	//{
+	//	if (ImGui::BeginMenu("Menu"))
+	//	{
+	//		//if (ImGui::MenuItem("Settings")) { /* Open Settings Window WIP */ }
+	//		if (ImGui::MenuItem("Detach DLL")) { utils::dll_management::kill_dll(); }
+	//		ImGui::EndMenu();
+	//	}
+	//	ImGui::EndMenuBar();
+	//}
 
 	const ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_NoCloseWithMiddleMouseButton | ImGuiTabBarFlags_Reorderable;
 	if (ImGui::BeginTabBar("MainTabs", tab_bar_flags))
