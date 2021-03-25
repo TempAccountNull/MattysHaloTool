@@ -184,7 +184,12 @@ void Main_Menu()
 			//ImGui::SameLine();
 			//HelpMarker("This kills any ai that gets looked at by the player.");
 
-			
+			if(ImGui::Button("Reinit Hooks"))
+			{
+				haloreach::hooks::reinit_hooks();
+			}
+			ImGui::SameLine();
+			HelpMarker("If things seem to be broken, press this button!");
 
 			ImGui::EndTabItem();
 		}
@@ -346,12 +351,16 @@ LRESULT CALLBACK DXGIMsgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 void ui::hooking::UnhookUI()
 {
+	
 	ImGui_ImplWin32_Shutdown();
 	ImGui_ImplDX11_Shutdown();
 	ImGui::DestroyContext();
 
+	DetourTransactionBegin();
+	DetourUpdateThread(GetCurrentThread());
 	DetourDetach(&(LPVOID&)fnIDXGISwapChainPresent, (PBYTE)Present);
 	DetourDetach(&(LPVOID&)fnID3D11DrawIndexed, (PBYTE)hookD3D11DrawIndexed);
+	DetourTransactionCommit();
 }
 
 //BOOL APIENTRY DllMain(HMODULE hModule,

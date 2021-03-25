@@ -14,6 +14,7 @@ bool haloreach::hooks::ai_null_perception = false;
 //Floats
 float haloreach::hooks::game_speed = 1.0;
 
+// Function Calls
 
 //game_time_get_speed
 typedef float __fastcall game_time_get_speed();
@@ -34,6 +35,8 @@ player_index_from_unit_index* player_index_from_unit_index_og = (player_index_fr
 //unit_start_running_blindly
 typedef int __fastcall unit_start_running_blindly(int unit);
 unit_start_running_blindly* run_blindly = (unit_start_running_blindly*)((char*)GetModuleHandle("haloreach.dll") + haloreach::offsets::unit_start_running_blindly_offset);
+
+/// Function Hooks
 
 //actor_perception_set_target
 static void __fastcall actor_perception_set_target(int a1, int a2);
@@ -204,20 +207,37 @@ bool __fastcall unit_update(int a1)
 
 void haloreach::hooks::init_hooks()
 {
+	DetourTransactionBegin();
+	DetourUpdateThread(GetCurrentThread());
+	//
 	game_update_hook();
 	unit_update_hook();
 	weapon_has_infinite_ammo_hook();
 	weapon_barrel_fire_weapon_heat_hook();
 	weapon_barrel_create_projectiles_hook();
 	actor_perception_set_target_hook();
+	//
+	DetourTransactionCommit();
 }
 
 void haloreach::hooks::deinit_hooks()
 {
+	DetourTransactionBegin();
+	DetourUpdateThread(GetCurrentThread());
+	//
 	game_update_dispose();
 	unit_update_dispose();
 	weapon_has_infinite_ammo_dispose();
 	weapon_barrel_fire_weapon_heat_dispose();
 	weapon_barrel_create_projectiles_dispose();
 	actor_perception_set_target_dispose();
+	//
+	DetourTransactionCommit();
+}
+
+void haloreach::hooks::reinit_hooks()
+{
+	deinit_hooks();
+	Sleep(1000);
+	init_hooks();
 }

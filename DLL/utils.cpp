@@ -17,12 +17,10 @@ std::string utils::locations::GetCurrentWorkingDir()
 
 void utils::DLL_Management::Kill_DLL()
 {
-	DetourTransactionBegin();
-	DetourUpdateThread(GetCurrentThread());
+
 	// Put unhooking shit here
 	ui::hooking::UnhookUI();
 	haloreach::hooks::deinit_hooks();
-	DetourTransactionCommit();
 
 	//Sleep for a lil bit
 	Sleep(1000);
