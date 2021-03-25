@@ -69,10 +69,10 @@ DWORD get_proc_id(const char* proc_name)
 	return proc_id;
 }
 
-bool file_exists(const std::string& filename)
+bool file_exists(const std::string filename)
 {
 	FILE* file = nullptr;
-	if (fopen_s(&file, filename.c_str(), "r"))
+	if (fopen_s(&file, filename.c_str(), "r") == EINVAL, file)
 	{
 		fclose(file);
 		return true;
