@@ -66,14 +66,14 @@ int WINAPI main()
 //	return TRUE;
 //}
 
-BOOL WINAPI dll_main(const HMODULE h_module, const DWORD dw_reason, [[maybe_unused]] LPVOID lp_reserved)
+BOOL WINAPI DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
 {
-	if (dw_reason == DLL_PROCESS_ATTACH)
+	if (dwReason == DLL_PROCESS_ATTACH)
 	{
-		DisableThreadLibraryCalls(h_module);
-		CreateThread(nullptr, NULL, reinterpret_cast<LPTHREAD_START_ROUTINE>(main), nullptr, NULL, nullptr);  // NOLINT(clang-diagnostic-main)
+		DisableThreadLibraryCalls(hModule);
+		CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)main, NULL, NULL, NULL);
 	}
-	else if (dw_reason == DLL_PROCESS_DETACH)
+	else if (dwReason == DLL_PROCESS_DETACH)
 	{
 		utils::dll_management::kill_dll();
 	}
