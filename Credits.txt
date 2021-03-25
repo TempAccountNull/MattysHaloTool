@@ -1,4 +1,0 @@
-Thanks to :
-neimand for his DirectX11 Hook Example. : https://github.com/niemand-sec/DirectX11Hook
-The Blam Creation Suite discord.
-orconut for his ui system: https://github.com/ocornut/imgui
