@@ -25,7 +25,7 @@ void clear_screen()
 	/* Fill the entire buffer with spaces */
 	if (!FillConsoleOutputCharacter(
 		h_std_out,
-		(TCHAR)' ',
+		static_cast<TCHAR>(' '),
 		cell_count,
 		home_coords,
 		&count

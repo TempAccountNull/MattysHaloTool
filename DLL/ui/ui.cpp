@@ -344,7 +344,7 @@ void ui::hooking::retrieveValues()
 {
 	DWORD_PTR hDxgi = (DWORD_PTR)GetModuleHandle("dxgi.dll");
 
-	fnIDXGISwapChainPresent = (IDXGISwapChainPresent)((DWORD_PTR)hDxgi + 0x4670);
+	fnIDXGISwapChainPresent = (IDXGISwapChainPresent)(static_cast<DWORD_PTR>(hDxgi) + 0x4670);
 }
 
 LRESULT CALLBACK DXGIMsgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) { return DefWindowProc(hwnd, uMsg, wParam, lParam); }
