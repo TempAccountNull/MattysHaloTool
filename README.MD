@@ -32,3 +32,6 @@ Im very new when it comes to c++ so i would love some constructive feedback abou
 * @neimand-sec for his [DirectX11 Hook Example.](https://github.com/niemand-sec/DirectX11Hook)
 * [The Blam Creation Suite discord.](https://discord.gg/ksvhEQD)
 * @ocornut for his [ui system.](https://github.com/ocornut/imgui)
+
+# Disclaimer:
+This tool cannot be used with the ant-cheat enabled and never will be. Discussion about this sort of topic will be ignored.
