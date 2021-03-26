@@ -3,8 +3,8 @@
 
 #include "pch.h"
 
-#include "utils.h"
-#include "games/halo-reach/hooks.h"
+#include "utils/utils.h"
+#include "games/halo-reach/function-hooking/hooks.h"
 #include "ui/ui.h"
 
 void hook_ui()

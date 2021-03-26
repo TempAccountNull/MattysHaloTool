@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "utils.h"
 
-#include "games/halo-reach/hooks.h"
-#include "ui/ui.h"
+#include "../games/halo-reach/function-hooking/hooks.h"
+#include "../ui/ui.h"
 
 // Misc Imports
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;

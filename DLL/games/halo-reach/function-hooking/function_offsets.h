@@ -1,7 +1,7 @@
 #pragma once
 namespace haloreach
 {
-	class offsets
+	class function_offsets
 	{
 	public:
 		static int unit_start_running_blindly_offset;
@@ -12,6 +12,7 @@ namespace haloreach
 		static int weapon_barrel_fire_weapon_heat_offset;
 		static int player_index_from_unit_index_offset;
 		static int weapon_get_owner_unit_index_offset;
+		static int player_control_machinima_available_offset;
 		static int weapon_barrel_create_projectiles_offset;
 		static int game_time_set_rate_scale_direct_offset;
 		static int game_time_get_speed_offset;

@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "ui.h"
-#include "../utils.h"
-#include "../games/halo-reach/hooks.h"
-
+#include "../utils/utils.h"
+#include "../games/halo-reach/function-hooking/hooks.h"
+#include "../games/halo-reach/mem-editing/memory.h"
 // DX11 imports
 #pragma comment(lib, "D3dcompiler.lib")
 #pragma comment(lib, "d3d11.lib")
@@ -13,6 +13,9 @@
 #include <imgui.h>
 #include <imgui_impl_win32.h>
 #include <imgui_impl_dx11.h>
+
+
+
 
 // D3X HOOK DEFINITIONS// D3X HOOK DEFINITIONS
 typedef HRESULT(__fastcall* IDXGISwapChainPresent)(IDXGISwapChain* p_swap_chain, UINT sync_interval, UINT flags);
@@ -173,6 +176,13 @@ void main_menu()
 			ImGui::Checkbox("AI No Perception", &haloreach::hooks::ai_null_perception);
 			ImGui::SameLine();
 			help_marker("Makes actor_perception_set_target return void meaning that the ai will not be able to notice much.");
+
+			if(ImGui::Checkbox("Pancam Mode", &haloreach::memory::pancam_mode))
+			{
+				haloreach::memory::toggle_pancam();
+			}
+			ImGui::SameLine();
+			help_marker("Shows player coordinates.");
 
 			if (ImGui::InputFloat("Game Speed", &game_speed))
 			{

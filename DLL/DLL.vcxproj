@@ -48,6 +48,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <GenerateManifest>false</GenerateManifest>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -78,6 +79,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(ProjectDir)libraries\imgui\backends;$(ProjectDir)libraries\imgui;$(ProjectDir)libraries\Detours-4.0.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -87,11 +89,14 @@
       <EnableUAC>false</EnableUAC>
       <AdditionalLibraryDirectories>$(ProjectDir)libraries\Detours-4.0.1\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>d3d11.lib;dxguid.lib;detours.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
-    <ClInclude Include="games\halo-reach\hooks.h" />
+    <ClInclude Include="games\halo-reach\function-hooking\hooks.h" />
+    <ClInclude Include="games\halo-reach\mem-editing\memory-offsets.h" />
+    <ClInclude Include="games\halo-reach\mem-editing\memory.h" />
     <ClInclude Include="libraries\imgui\backends\imgui_impl_dx11.h" />
     <ClInclude Include="libraries\imgui\backends\imgui_impl_win32.h" />
     <ClInclude Include="libraries\imgui\imgui.h" />
@@ -99,21 +104,28 @@
     <ClInclude Include="libraries\imgui\imstb_rectpack.h" />
     <ClInclude Include="libraries\imgui\imstb_textedit.h" />
     <ClInclude Include="libraries\imgui\imstb_truetype.h" />
+    <ClInclude Include="utils\memory_editing.h" />
+    <ClInclude Include="memory\memory_editing.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="ui\ui.h" />
-    <ClInclude Include="utils.h" />
+    <ClInclude Include="utils\utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dll_main.cpp" />
-    <ClCompile Include="games\halo-reach\hooks.cpp" />
-    <ClCompile Include="games\halo-reach\offsets.cpp">
+    <ClCompile Include="games\halo-reach\function-hooking\hooks.cpp" />
+    <ClCompile Include="games\halo-reach\mem-editing\memory-offsets.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="games\halo-reach\function-hooking\function_offsets.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="games\halo-reach\offsets.h">
+    <ClCompile Include="games\halo-reach\function-hooking\function_offsets.h">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="games\halo-reach\mem-editing\memory.cpp" />
     <ClCompile Include="libraries\imgui\backends\imgui_impl_dx11.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
@@ -142,12 +154,13 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="utils\memory_editing.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="ui\ui.cpp" />
-    <ClCompile Include="utils.cpp" />
+    <ClCompile Include="utils\utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Credits.txt" />

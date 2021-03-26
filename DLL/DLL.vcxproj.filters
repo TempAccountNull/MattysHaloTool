@@ -45,10 +45,22 @@
     <ClInclude Include="libraries\imgui\imstb_truetype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="utils.h">
+    <ClInclude Include="memory\memory_editing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="games\halo-reach\hooks.h">
+    <ClInclude Include="games\halo-reach\function-hooking\hooks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="games\halo-reach\mem-editing\memory-offsets.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="games\halo-reach\mem-editing\memory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\memory_editing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -80,19 +92,28 @@
     <ClCompile Include="libraries\imgui\backends\imgui_impl_dx11.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="utils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="games\halo-reach\hooks.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="games\halo-reach\offsets.h">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="games\halo-reach\offsets.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="dll_main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="games\halo-reach\function-hooking\function_offsets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="games\halo-reach\function-hooking\function_offsets.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="games\halo-reach\function-hooking\hooks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="games\halo-reach\mem-editing\memory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="games\halo-reach\mem-editing\memory-offsets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\memory_editing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
