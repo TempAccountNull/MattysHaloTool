@@ -11,6 +11,12 @@
 
 This tool is a work in progress, so expect it to be buggy!
 
+## Instructions:
+* Put the dll and injector into a folder
+* Run the injector
+* Run MCC
+* Once injected, press insert for menu!
+
 ## Game Support:
 - [ ] Halo 1
 - [ ] Halo 2
