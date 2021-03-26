@@ -117,7 +117,4 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="Credits.txt" />
-  </ItemGroup>
 </Project>

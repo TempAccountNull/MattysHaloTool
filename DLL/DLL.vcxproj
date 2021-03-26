@@ -162,9 +162,6 @@
     <ClCompile Include="ui\ui.cpp" />
     <ClCompile Include="utils\utils.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="Credits.txt" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
