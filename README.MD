@@ -34,4 +34,4 @@ Im very new when it comes to c++ so i would love some constructive feedback abou
 * @ocornut for his [ui system.](https://github.com/ocornut/imgui)
 
 # Disclaimer:
-This tool cannot be used with the ant-cheat enabled and never will be. Discussion about this sort of topic will be ignored.
+This tool cannot be used with the anti-cheat enabled and never will be. Discussion about this sort of topic will be ignored.
