@@ -10,6 +10,7 @@
 
 
 This tool is a work in progress, so expect it to be buggy!
+
 Im very new when it comes to c++ so i would love some constructive feedback about my coding skills.
 
 ## Instructions:
