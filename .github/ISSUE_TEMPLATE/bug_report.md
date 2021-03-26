@@ -7,6 +7,7 @@ assignees: ''
 
 ---
 
+**If you can, try running the tool inside visual studios debugger and screenshotting the error that pops up there.**
 **Describe the bug**
 A clear and concise description of what the bug is.
 
