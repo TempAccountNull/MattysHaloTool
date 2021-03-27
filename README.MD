@@ -28,6 +28,8 @@ Im very new when it comes to c++ so i would love some constructive feedback abou
 - [x] Halo Reach
 - [ ] Halo 4
 
+Right now the main focus is Halo Reach but i will do the other games in due time.
+
 # Thanks to:
 * @neimand-sec for his [DirectX11 Hook Example.](https://github.com/niemand-sec/DirectX11Hook)
 * [The Blam Creation Suite discord.](https://discord.gg/ksvhEQD)
