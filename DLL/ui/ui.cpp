@@ -174,6 +174,13 @@ void main_menu()
 			ImGui::SameLine();
 			help_marker("This causes any weapon that does not belong to the player to not fire any projectiles.\nWorks with vehicles.");
 
+			if (ImGui::Checkbox("AI spawning and night vision in MP", &haloreach::memory::ai_spawning_mp_enabled))
+			{
+				haloreach::memory::toggle_ai_spawning_mp();
+			}
+			ImGui::SameLine();
+			help_marker("Makes it able to spawn AI in multiplayer through blamscript or effects and the ability to toggle night vision.");
+			
 			ImGui::Checkbox("AI go crazy", &haloreach::hooks::ai_go_crazy);
 			ImGui::SameLine();
 			help_marker("Makes all units that are not in a vehicle run around like mad, players not included.");

@@ -7,5 +7,7 @@ namespace haloreach
 		static int pancam_offset;
 		static int infinite_grenades_offset;
 		static int hs_print_opcode_offset;
+		static int ai_spawning_effects_offset;
+		static int ai_spawning_scripts_offset;
 	};
 }

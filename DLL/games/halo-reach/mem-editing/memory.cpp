@@ -9,6 +9,7 @@
 bool haloreach::memory::pancam_mode = false;
 bool haloreach::memory::inf_grenades = false;
 bool haloreach::memory::redirect_print = false;
+bool haloreach::memory::ai_spawning_mp_enabled = false;
 
 void haloreach::memory::toggle_pancam()
 {
@@ -52,5 +53,26 @@ void haloreach::memory::toggle_redirect_print()
 	else
 	{
 		utils::memory::Patch(lp_base_address, reinterpret_cast<char*>(&print_on), 3);
+	}
+}
+
+
+
+void haloreach::memory::toggle_ai_spawning_mp()
+{
+	BYTE ai_effects_off[] = { 0x0F ,0x84 ,0xD5 ,0x00 ,0x00, 0x00 };
+	BYTE ai_scripting_off[] = { 0x74 ,0x02 };
+
+
+	char* ai_effects_address = reinterpret_cast<char*>(GetModuleHandle("haloreach.dll")) + memory_offsets::ai_spawning_effects_offset;
+	char* ai_scripting_address = reinterpret_cast<char*>(GetModuleHandle("haloreach.dll")) + memory_offsets::ai_spawning_scripts_offset;
+	if (!ai_spawning_mp_enabled) {
+		utils::memory::Patch(ai_effects_address, reinterpret_cast<char*>(&ai_effects_off), 6);
+		utils::memory::Patch(ai_scripting_address, reinterpret_cast<char*>(&ai_scripting_off), 2);
+	}
+	else
+	{
+		utils::memory::Nop(ai_effects_address,6);
+		utils::memory::Nop(ai_scripting_address, 2);
 	}
 }

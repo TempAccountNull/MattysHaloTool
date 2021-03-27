@@ -96,3 +96,7 @@ int haloreach::memory_offsets::hs_print_opcode_offset = 0x8DB910;
 //		"haloreach.dll" + 8DB924 : FD - std
 //		"haloreach.dll" + 8DB925 : 7F 00 - jg haloreach.dll + 8DB927
 //}
+
+int haloreach::memory_offsets::ai_spawning_effects_offset = 0x58D33C;
+
+int haloreach::memory_offsets::ai_spawning_scripts_offset = 0x4B45B;
