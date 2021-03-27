@@ -377,6 +377,56 @@ void ui::hooking::retrieve_values()
 
 LRESULT CALLBACK DXGIMsgProc(const HWND hwnd, const UINT uMsg, const WPARAM wParam, const LPARAM lParam) { return DefWindowProc(hwnd, uMsg, wParam, lParam); }
 
+void  ui::hooking::get_present()
+{
+	WNDCLASSEXA wc = { sizeof(WNDCLASSEX), CS_CLASSDC, DXGIMsgProc, 0L, 0L, GetModuleHandleA(NULL), NULL, NULL, NULL, NULL, "DX", NULL };
+	RegisterClassExA(&wc);
+	HWND hWnd = CreateWindowA("DX", NULL, WS_OVERLAPPEDWINDOW, 100, 100, 300, 300, NULL, NULL, wc.hInstance, NULL);
+
+	DXGI_SWAP_CHAIN_DESC sd;
+	ZeroMemory(&sd, sizeof(sd));
+	sd.BufferCount = 1;
+	sd.BufferDesc.Width = 2;
+	sd.BufferDesc.Height = 2;
+	sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	sd.BufferDesc.RefreshRate.Numerator = 60;
+	sd.BufferDesc.RefreshRate.Denominator = 1;
+	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	sd.OutputWindow = hWnd;
+	sd.SampleDesc.Count = 1;
+	sd.SampleDesc.Quality = 0;
+	sd.Windowed = TRUE;
+	sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+	D3D_FEATURE_LEVEL FeatureLevelsRequested = D3D_FEATURE_LEVEL_11_0;
+	UINT numFeatureLevelsRequested = 1;
+	D3D_FEATURE_LEVEL FeatureLevelsSupported;
+	HRESULT hr;
+	IDXGISwapChain* swapchain = 0;
+	ID3D11Device* dev = 0;
+	ID3D11DeviceContext* devcon = 0;
+	if (FAILED(hr = D3D11CreateDeviceAndSwapChain(NULL,
+		D3D_DRIVER_TYPE_HARDWARE,
+		NULL,
+		0,
+		&FeatureLevelsRequested,
+		numFeatureLevelsRequested,
+		D3D11_SDK_VERSION,
+		&sd,
+		&swapchain,
+		&dev,
+		&FeatureLevelsSupported,
+		&devcon)))
+	{
+		return;
+	}
+	DWORD_PTR* pSwapChainVtable = NULL;
+	pSwapChainVtable = (DWORD_PTR*)swapchain;
+	pSwapChainVtable = (DWORD_PTR*)pSwapChainVtable[0];
+	fn_idxgi_swap_chain_present = (IDXGISwapChainPresent)(DWORD_PTR)pSwapChainVtable[8];
+	g_present_hooked = true;
+	Sleep(2000);
+}
+
 void ui::hooking::unhook_ui()
 {
 	ImGui_ImplWin32_Shutdown();

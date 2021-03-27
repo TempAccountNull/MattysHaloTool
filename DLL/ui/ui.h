@@ -9,6 +9,7 @@ namespace ui
 		static void retrieve_values();
 		static void detour_directx_present();
 		static void detour_directx_draw_indexed();
+		static void get_present();
 		static void unhook_ui();
 	};
 }
