@@ -189,6 +189,13 @@ void main_menu()
 			ImGui::SameLine();
 			help_marker("Shows player coordinates.");
 
+			if (ImGui::Checkbox("Debug Script Output", &haloreach::memory::redirect_print))
+			{
+				haloreach::memory::toggle_redirect_print();
+			}
+			ImGui::SameLine();
+			help_marker("Displays debug output for blamscript. A little bit unstable.");
+
 			if (ImGui::InputFloat("Game Speed", &game_speed))
 			{
 				haloreach::hooks::game_speed = game_speed;

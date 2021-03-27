@@ -34,3 +34,65 @@ int haloreach::memory_offsets::pancam_offset = 0xAED08;
 //}
 
 int haloreach::memory_offsets::infinite_grenades_offset = 0x4FEEF0;
+
+int haloreach::memory_offsets::hs_print_opcode_offset = 0x8DB910;
+
+
+//{
+//	// ORIGINAL CODE - INJECTION POINT: "haloreach.dll"+8DE018 - hs_chud_post_message_hack
+//
+//	"haloreach.dll" + 8DDFFF: 00 58 F5 - add[rax - 0B], bl
+//		"haloreach.dll" + 8DE002 : FD - std
+//		"haloreach.dll" + 8DE003 : EF - out dx, eax
+//		"haloreach.dll" + 8DE004 : FD - std
+//		"haloreach.dll" + 8DE005 : 7F 00 - jg haloreach.dll + 8DE007
+//		"haloreach.dll" + 8DE007 : 00 80 F5 FD EF FD - add[rax - 0210020B], al
+//		"haloreach.dll" + 8DE00D : 7F 00 - jg haloreach.dll + 8DE00F
+//		"haloreach.dll" + 8DE00F : 00 B8 F4 FD EF FD - add[rax - 0210020C], bh
+//		"haloreach.dll" + 8DE015 : 7F 00 - jg haloreach.dll + 8DE017
+//		"haloreach.dll" + 8DE017 : 00 - db 00  // SHORTENED TO HIT INJECTION FROM:  add al,ah
+//		// ---------- INJECTING HERE ----------
+//		"haloreach.dll" + 8DE018 : E0 F4 - loopne haloreach.dll + 8DE00E
+//		"haloreach.dll" + 8DE01A : FD - std
+//		"haloreach.dll" + 8DE01B : EF - out dx, eax
+//		"haloreach.dll" + 8DE01C : FD - std
+//		// ---------- DONE INJECTING  ----------
+//		"haloreach.dll" + 8DE01D : 7F 00 - jg haloreach.dll + 8DE01F
+//		"haloreach.dll" + 8DE01F : 00 08 - add[rax], cl
+//		"haloreach.dll" + 8DE021: F5 - cmc
+//		"haloreach.dll" + 8DE022 : FD - std
+//		"haloreach.dll" + 8DE023 : EF - out dx, eax
+//		"haloreach.dll" + 8DE024 : FD - std
+//		"haloreach.dll" + 8DE025 : 7F 00 - jg haloreach.dll + 8DE027
+//		"haloreach.dll" + 8DE027 : 00 40 F4 - add[rax - 0C], al
+//		"haloreach.dll" + 8DE02A : FD - std
+//		"haloreach.dll" + 8DE02B : EF - out dx, eax
+//}
+
+//{
+//	// ORIGINAL CODE - INJECTION POINT: "haloreach.dll"+8DB910 - hs_print
+//
+//	"haloreach.dll" + 8DB901: B3 FE - mov bl, -02
+//		"haloreach.dll" + 8DB903 : EF - out dx, eax
+//		"haloreach.dll" + 8DB904 : FD - std
+//		"haloreach.dll" + 8DB905 : 7F 00 - jg haloreach.dll + 8DB907
+//		"haloreach.dll" + 8DB907 : 00 30 - add[rax], dh
+//		"haloreach.dll" + 8DB909 : B3 FE - mov bl, -02
+//		"haloreach.dll" + 8DB90B : EF - out dx, eax
+//		"haloreach.dll" + 8DB90C : FD - std
+//		"haloreach.dll" + 8DB90D : 7F 00 - jg haloreach.dll + 8DB90F
+//		"haloreach.dll" + 8DB90F : 00 - db 00  // SHORTENED TO HIT INJECTION FROM:  add [rax],bl
+//		// ---------- INJECTING HERE ----------
+//		"haloreach.dll" + 8DB910 : 18 B2 FE EF FD 7F - sbb[rdx + 7FFDEFFE], dh
+//		// ---------- DONE INJECTING  ----------
+//		"haloreach.dll" + 8DB916 : 00 00 - add[rax], al
+//		"haloreach.dll" + 8DB918 : 40 B2 FE - mov dl, -02
+//		"haloreach.dll" + 8DB91B : EF - out dx, eax
+//		"haloreach.dll" + 8DB91C : FD - std
+//		"haloreach.dll" + 8DB91D : 7F 00 - jg haloreach.dll + 8DB91F
+//		"haloreach.dll" + 8DB91F : 00 68 B2 - add[rax - 4E], ch
+//		"haloreach.dll" + 8DB922 : FE - db - 02
+//		"haloreach.dll" + 8DB923 : EF - out dx, eax
+//		"haloreach.dll" + 8DB924 : FD - std
+//		"haloreach.dll" + 8DB925 : 7F 00 - jg haloreach.dll + 8DB927
+//}

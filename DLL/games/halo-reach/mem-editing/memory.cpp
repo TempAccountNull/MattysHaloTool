@@ -1,3 +1,4 @@
+// ReSharper disable All
 #include "pch.h"
 #include "memory.h"
 #include "../../../utils/memory_editing.h"
@@ -6,7 +7,8 @@
 
 //init vars
 bool haloreach::memory::pancam_mode = false;
-bool haloreach::memory::inf_grenades;
+bool haloreach::memory::inf_grenades = false;
+bool haloreach::memory::redirect_print = false;
 
 void haloreach::memory::toggle_pancam()
 {
@@ -26,7 +28,6 @@ void haloreach::memory::toggle_pancam()
 
 void haloreach::memory::toggle_inf_grenades()
 {
-	BYTE grenades_on[] = { 0x90, 0x90 };
 	BYTE grenades_off[] = { 0x2A, 0xC3 };
 	char* lp_base_address = reinterpret_cast<char*>(GetModuleHandle("haloreach.dll")) + memory_offsets::infinite_grenades_offset;
 	if (!inf_grenades) {
@@ -34,6 +35,22 @@ void haloreach::memory::toggle_inf_grenades()
 	}
 	else
 	{
-		utils::memory::Patch(lp_base_address, reinterpret_cast<char*>(&grenades_on), 2);
+		utils::memory::Nop(lp_base_address, 2);
+	}
+}
+
+void haloreach::memory::toggle_redirect_print()
+{
+	BYTE print_on[] = { 0xE0, 0xF4, 0x64 };
+	BYTE print_off[] = { 0x18, 0xB2, 0x65 };
+
+
+	char* lp_base_address = reinterpret_cast<char*>(GetModuleHandle("haloreach.dll")) + memory_offsets::hs_print_opcode_offset;
+	if (!redirect_print) {
+		utils::memory::Patch(lp_base_address, reinterpret_cast<char*>(&print_off), 3);
+	}
+	else
+	{
+		utils::memory::Patch(lp_base_address, reinterpret_cast<char*>(&print_on), 3);
 	}
 }
