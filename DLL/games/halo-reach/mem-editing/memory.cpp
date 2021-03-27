@@ -6,6 +6,7 @@
 
 //init vars
 bool haloreach::memory::pancam_mode = false;
+bool haloreach::memory::inf_grenades;
 
 void haloreach::memory::toggle_pancam()
 {
@@ -21,3 +22,18 @@ void haloreach::memory::toggle_pancam()
 	}
 }
 
+
+
+void haloreach::memory::toggle_inf_grenades()
+{
+	BYTE grenades_on[] = { 0x90, 0x90 };
+	BYTE grenades_off[] = { 0x2A, 0xC3 };
+	char* lp_base_address = reinterpret_cast<char*>(GetModuleHandle("haloreach.dll")) + memory_offsets::infinite_grenades_offset;
+	if (!inf_grenades) {
+		utils::memory::Patch(lp_base_address, reinterpret_cast<char*>(&grenades_off), 2);
+	}
+	else
+	{
+		utils::memory::Patch(lp_base_address, reinterpret_cast<char*>(&grenades_on), 2);
+	}
+}

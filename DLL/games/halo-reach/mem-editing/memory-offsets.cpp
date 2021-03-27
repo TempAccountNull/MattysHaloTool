@@ -32,3 +32,5 @@ int haloreach::memory_offsets::pancam_offset = 0xAED08;
 //		"haloreach.dll" + AED30 : 0F 84 7C 01 00 00 - je haloreach.dll + AEEB2
 //		"haloreach.dll" + AED36 : 48 8D 4C 24 70 - lea rcx, [rsp + 70]
 //}
+
+int haloreach::memory_offsets::infinite_grenades_offset = 0x4FEEF0;

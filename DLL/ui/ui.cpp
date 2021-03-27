@@ -163,6 +163,11 @@ void main_menu()
 			ImGui::SameLine();
 			help_marker("Behaves the same as the infinite ammo multi-player setting.");
 
+			if (ImGui::Checkbox("Infinite Grenades", &haloreach::memory::inf_grenades))
+			{
+				haloreach::memory::toggle_inf_grenades();
+			}
+
 			ImGui::Checkbox("No Weapon Overheat", &haloreach::hooks::no_overheat);
 
 			ImGui::Checkbox("Player projectiles only.", &haloreach::hooks::player_proj_only);
