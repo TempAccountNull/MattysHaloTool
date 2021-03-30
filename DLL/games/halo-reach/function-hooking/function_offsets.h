@@ -13,8 +13,10 @@ namespace haloreach
 		static int player_index_from_unit_index_offset;
 		static int weapon_get_owner_unit_index_offset;
 		static int player_control_machinima_available_offset;
+		static int player_mapping_next_active_output_user_offset;
 		static int weapon_barrel_create_projectiles_offset;
 		static int game_time_set_rate_scale_direct_offset;
 		static int game_time_get_speed_offset;
+		static int player_mapping_get_unit_by_output_user_offset;
 	};
 }

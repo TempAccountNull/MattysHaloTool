@@ -1,3 +1,4 @@
+// ReSharper disable All
 #include "pch.h"
 #include "hooks.h"
 #include "function_offsets.h"
@@ -11,10 +12,24 @@ bool haloreach::hooks::no_overheat = false;
 bool haloreach::hooks::player_proj_only = false;
 bool haloreach::hooks::ai_null_perception = false;
 
+#if defined _DEBUG
+bool haloreach::hooks::test = false;
+#endif
+
 //Floats
 float haloreach::hooks::game_speed = 1.0;
 
 // Function Calls
+
+//player_mapping_next_active_output_user
+typedef __int64 __fastcall player_mapping_get_unit_by_output_user(unsigned int a1);
+player_mapping_get_unit_by_output_user* get_local_player_unit = reinterpret_cast<player_mapping_get_unit_by_output_user*>(reinterpret_cast<char*>(GetModuleHandle("haloreach.dll")) +
+	haloreach::function_offsets::player_mapping_get_unit_by_output_user_offset);
+
+//player_mapping_next_active_output_user
+typedef __int64 __fastcall player_mapping_next_active_output_user(int a1);
+player_mapping_next_active_output_user* get_local_player = reinterpret_cast<player_mapping_next_active_output_user*>(reinterpret_cast<char*>(GetModuleHandle("haloreach.dll")) +
+	haloreach::function_offsets::player_mapping_next_active_output_user_offset);
 
 //game_time_get_speed
 typedef float __fastcall game_time_get_speed();
@@ -170,6 +185,28 @@ void game_update_dispose()
 
 void __fastcall game_update(const int a1, float near* a2)
 {
+
+	#if defined _DEBUG
+	if (haloreach::hooks::test)
+	{
+		int local_player = get_local_player(-1);
+		if (local_player != -1)
+		{
+			int local_player_unit = get_local_player_unit(local_player);
+			if (local_player_unit != -1)
+			{
+				std::cout << std::hex << local_player_unit << std::endl;
+			}
+		}
+		else
+		{
+			std::cout << "Player unit not found!" << std::endl;
+		}
+
+		haloreach::hooks::test = false;
+	}
+	#endif
+	
 	//TODO: Possibly not put these things in a constant loop?
 	game_time_set_rate_scale_direct_og(haloreach::hooks::game_speed);
 

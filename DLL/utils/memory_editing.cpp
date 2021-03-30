@@ -2,7 +2,7 @@
 #include "memory_editing.h"
 
 
-void utils::memory::Patch(char* dst, char* src, int size)
+void utils::memory::patch(char* dst, char* src, int size)
 {
 	DWORD oldprotect;
 	VirtualProtect(dst, size, PAGE_EXECUTE_READWRITE, &oldprotect);
@@ -11,7 +11,7 @@ void utils::memory::Patch(char* dst, char* src, int size)
 }
 
 //Internal Nop
-void utils::memory::Nop(char* dst, unsigned int size)
+void utils::memory::nop(char* dst, unsigned int size)
 {
 	DWORD oldprotect;
 	VirtualProtect(dst, size, PAGE_EXECUTE_READWRITE, &oldprotect);

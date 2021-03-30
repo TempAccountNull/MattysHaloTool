@@ -39,13 +39,16 @@ void hook_games()
 
 int WINAPI main()
 {
+	#if defined _DEBUG
 	//Initialize Console
-	//AllocConsole();
-	//AttachConsole(GetCurrentProcessId());
+	AllocConsole();
+	AttachConsole(GetCurrentProcessId());
 
-	////Redirect output to console
-	//freopen("CONIN$", "r", stdin);
-	//freopen("CONOUT$", "w", stdout);
+	//Redirect output to console
+	freopen("CONIN$", "r", stdin);
+	freopen("CONOUT$", "w", stdout);
+	#endif
+	
 	hook_games();
 	hook_ui();
 }

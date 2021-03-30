@@ -13,6 +13,11 @@ namespace haloreach
 		static bool no_overheat;
 		static bool player_proj_only;
 		static bool ai_null_perception;
+
+		#if defined _DEBUG
+		static bool test;
+		#endif
+		
 		static float game_speed;
 	};
 }

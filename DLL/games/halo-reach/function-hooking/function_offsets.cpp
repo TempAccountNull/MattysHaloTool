@@ -28,3 +28,7 @@ int haloreach::function_offsets::game_time_get_speed_offset = 0x51DB8;
 int haloreach::function_offsets::weapon_get_owner_unit_index_offset = 0x496D00;
 
 int haloreach::function_offsets::player_control_machinima_available_offset = 0xC38F4;
+
+int haloreach::function_offsets::player_mapping_next_active_output_user_offset = 0x59A24;
+
+int haloreach::function_offsets::player_mapping_get_unit_by_output_user_offset = 0x59950;

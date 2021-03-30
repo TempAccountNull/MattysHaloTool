@@ -221,6 +221,15 @@ void main_menu()
 			ImGui::SameLine();
 			help_marker("If things seem to be broken, press this button!");
 
+			#if defined _DEBUG
+			if (ImGui::Button("Test"))
+			{
+				haloreach::hooks::test = true;
+			}
+			ImGui::SameLine();
+			help_marker("This button is for testing stuff, not really useful in release builds.");
+			#endif
+
 			ImGui::EndTabItem();
 		}
 		if (ImGui::BeginTabItem("Universal"))
