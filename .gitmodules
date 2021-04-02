@@ -1,6 +1,3 @@
 [submodule "DLL/libraries/imgui"]
 	path = DLL/libraries/imgui
 	url = https://github.com/ocornut/imgui.git
-[submodule "CrapInjector"]
-	path = CrapInjector
-	url = https://github.com/matty45/CrapInjector.git
