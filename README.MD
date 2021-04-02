@@ -14,9 +14,9 @@ This tool is a work in progress, so expect it to be buggy!
 Im very new when it comes to c++ so i would love some constructive feedback about my coding skills.
 
 ## Instructions:
-* Put the dll and injector into a folder
+* Put the dll into a folder somewhere
 * Run MCC and wait until the main menu appears
-* Run the injector
+* Inject the dll with an injector of your choice
 * Once injected, press insert for menu!
 
 ## Game Support:
