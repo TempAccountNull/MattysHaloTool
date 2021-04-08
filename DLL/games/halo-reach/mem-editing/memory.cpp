@@ -65,7 +65,7 @@ void haloreach::memory::toggle_ai_spawning_mp()
 
 
 	char* ai_effects_address = reinterpret_cast<char*>(GetModuleHandle("haloreach.dll")) + memory_offsets::ai_spawning_effects_offset;
-	char* ai_scripting_address = reinterpret_cast<char*>(GetModuleHandle("haloreach.dll")) + memory_offsets::ai_spawning_scripts_offset;
+	char* ai_scripting_address = reinterpret_cast<char*>(GetModuleHandle("haloreach.dll")) + memory_offsets::campaign_trick_offset;
 	if (!ai_spawning_mp_enabled) {
 		utils::memory::patch(ai_effects_address, reinterpret_cast<char*>(&ai_effects_off), 6);
 		utils::memory::patch(ai_scripting_address, reinterpret_cast<char*>(&ai_scripting_off), 2);
